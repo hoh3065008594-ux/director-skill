@@ -1,0 +1,369 @@
+# demo《机器人与沙漠温室中的希望之种》12 段完整提示词
+
+> 来源：demo 工作流 JSON（v2 队列版，尾帧参考衔接格式）。每段 5 秒 × 12 段 = 60 秒。
+> 参考图映射：<Picture 1>=主角机器人 01-maintenance-robot.png，<Picture 3>=巡逻怪兽 02-patrol-beast.png，<Picture 4>=废墟城市 03-ruined-city.png，<Picture 5>=温室 04-abandoned-greenhouse.png。
+> 注意：此为 V5 及以前的尾帧参考编号格式（后续段 <Picture 1>=上一段尾帧）；V6 版本提示词全部指代固定参考图。
+
+---
+
+## 第 01 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Subject 1> is the small vintage maintenance robot and the transparent seedling capsule from <Picture 1>, preserving the robot's round child-height proportions, chipped ivory-white enamel, scratched metal joints, exactly one circular cyan-blue electronic eye, compact tool compartments, and the capsule containing exactly one living two-leaf green sprout in dark soil.
+<Subject 2> is the ruined urban environment from <Picture 3>, preserving its sand-buried asphalt, collapsed concrete structures, exposed steel, dusty amber atmosphere, and abandoned industrial character.
+
+summary:
+[reference generation] The target video introduces <Subject 1> discovering and lifting the seedling capsule from the sand within <Subject 2>. The five-second continuous shot ends with the robot standing securely while holding the capsule against its chest.
+
+retention_analysis:
+<Subject 1> (appears in [Shot 1]): fully_preserved - the robot's identity, single blue eye, round proportions, chipped ivory paint, metal construction, and transparent two-leaf seedling capsule are retained exactly as the character anchor.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the sand, ruined concrete, rusted structural fragments, dusty air, and warm wasteland lighting are retained as the surrounding environment.
+
+detailed_description:
+The target video uses premium cinematic 3D CG stylized realism, physically based worn materials, restrained feature-animation character appeal, and a post-apocalyptic industrial world. The image remains free of text, logos, borders, and watermarks.
+[Shot 1] A low medium-wide shot frames <Subject 1> kneeling in the foreground of <Subject 2>, surrounded by shallow wind-shaped sand and small fragments of corroded metal. The robot's chipped ivory-white body is dusty, its single cyan-blue eye is initially dim, and both articulated hands are partly buried around the transparent seedling capsule. Warm late-afternoon light enters from frame right, producing a thin amber rim on the robot while cool gray haze separates the distant ruins. The camera pushes in with small amplitude at slow speed. The robot carefully sweeps sand from the capsule glass with one thumb, revealing the intact two-leaf green sprout. Its circular eye brightens from dim blue to clear cyan, focusing directly on the living plant. Keeping the capsule level so the soil and sprout remain undisturbed, the robot closes both hands securely around its metal end rings and rises from kneeling to a balanced standing posture in one slow, readable movement. Fine sand falls from its forearms and knees. During the final half-second, all motion settles: the robot stands upright, holds the capsule horizontally against the center of its chest, looks down at the sprout, and forms a clean, sharp, motionless composition suitable for exporting as the next segment's first-frame reference.
+
+overall_soundscape:
+Dry wind moves softly across the open ruins, with faint grains of sand brushing metal. Small servo motors hum as the robot rises, accompanied by quiet joint clicks, glass wiping, and a gentle electronic eye activation tone.
+
+non_diegetic_music:
+Sparse low strings and widely spaced piano notes at a slow tempo, joined by a very soft electronic pulse. The phrase remains unresolved and continues without a closing cadence.
+```
+
+---
+
+## 第 02 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the actual final frame of the preceding segment and defining the robot's exact standing pose, capsule position, camera placement, composition, lighting, and object state at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the round child-height body, chipped ivory-white enamel, exactly one cyan-blue eye, articulated metal limbs, and the sealed transparent capsule containing one two-leaf green sprout.
+<Subject 2> is the ruined city from <Picture 4>, preserving the sand-covered avenue, broken elevated structures, collapsed towers, exposed rebar, dusty atmosphere, and long open route.
+<Subject 3> is the domed greenhouse architecture from <Picture 5>, used only as a very small distant destination landmark on the horizon.
+
+summary:
+[keyframe completion + reference generation] The target video begins exactly from <Picture 1>. <Subject 1> turns toward the distant <Subject 3> and walks forward through <Subject 2>, ending in a stable rear three-quarter pose facing the destination.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening frame reproduces the preceding segment's robot pose, expression, capsule placement, camera position, lighting, and surrounding debris without alteration.
+<Subject 1> (appears in [Shot 1]): fully_preserved - the robot, its single blue eye, worn ivory finish, proportions, and sealed seedling capsule remain unchanged.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the city retains its established ruined geometry, sand, industrial debris, amber light, and dusty depth.
+<Subject 3> (appears in [Shot 1]): weak_reference - only the greenhouse's recognizable domed silhouette is visible at extreme distance.
+
+detailed_description:
+The target video continues in the same premium cinematic 3D CG stylized realism with physically based weathered materials and matching late-afternoon light. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> stands balanced in the same place, holds the transparent capsule horizontally against its chest with both hands, looks down at the two-leaf sprout, and retains the same blue-eye brightness, camera height, framing, dust, shadows, and background arrangement. From this unchanged state, the robot raises its eye toward the horizon and slowly rotates its torso and feet toward the open avenue through <Subject 2>. The camera arcs gently to a rear three-quarter tracking position while preserving the established scale. The robot begins walking along the central sand-covered route with short, deliberate steps, keeping the capsule level and close to its chest so the sprout barely moves. Broken elevated rails and collapsed concrete towers create leading lines toward <Subject 3>, visible only as a tiny pale dome in the far distance. Each foot presses a shallow mark into the sand while loose dust trails behind. Near the end, the robot slows and stops on the central axis of the avenue. During the final half-second, it stands motionless in a clean rear three-quarter silhouette, both hands fixed around the capsule, head and single blue eye directed toward the distant greenhouse, with the route clearly extending ahead for the next segment.
+
+overall_soundscape:
+Continuous dry wind passes through hollow ruins while the robot's footsteps compress sand with muted crunches. Small servos and worn joints produce soft mechanical whirs, and the capsule fittings give one faint glass-and-metal rattle.
+
+non_diegetic_music:
+Low strings and sparse piano continue at a slow tempo as the soft electronic pulse becomes slightly more regular. The music remains restrained and unresolved, with no ending cadence.
+```
+
+---
+
+## 第 03 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the exact robot pose, capsule state, road position, camera viewpoint, composition, and light at 0.00 seconds.
+<Subject 1> is the maintenance robot and transparent seedling capsule from <Picture 2>, preserving the robot's round proportions, chipped ivory-white paint, single cyan-blue eye, articulated limbs, and the intact two-leaf sprout.
+<Subject 2> is the ruined city route from <Picture 4>, preserving sand-covered broken asphalt, collapsed structures, corroded metal debris, and dusty amber lighting.
+
+summary:
+[keyframe completion + reference generation] Beginning exactly from <Picture 1>, <Subject 1> reaches a narrow break in the roadway, places a loose metal plate across it, and carefully steps onto the far side while protecting the capsule.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening pose, capsule orientation, rear three-quarter framing, road alignment, distant depth, and light reproduce the actual preceding final frame.
+<Subject 1> (appears in [Shot 1]): fully_preserved - identity, single blue eye, ivory worn surfaces, body proportions, and the sealed living seedling remain consistent.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the roadway and surrounding ruins retain their established material, scale, dust, and lighting.
+
+detailed_description:
+The target video continues the same premium cinematic 3D CG stylized realism, physical material detail, camera height, and late-afternoon wasteland palette. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly, including <Subject 1>'s rear three-quarter standing posture, both hands around the horizontal capsule, the blue eye facing down the route, all debris positions, shadows, and airborne dust. From this state, the robot takes two short steps forward and encounters a narrow collapsed break across the roadway, just wide enough to block its path. Without loosening its left arm around the capsule, it crouches slightly and uses its right hand to pull a flat rusted steel plate from the road edge. The camera trucks sideways with small amplitude, keeping the robot, gap, and landing point readable in one continuous shot. The robot lays the plate securely across the break, returns its right hand to the capsule, and crosses with two careful balanced steps. The plate flexes slightly but remains in place; the capsule stays horizontal, the soil does not spill, and the two green leaves tremble only once. The robot reaches solid asphalt on the far side and draws its trailing foot clear. During the final half-second, it stands completely still beyond the gap, holding the capsule against its chest and facing forward, while the rusted plate and broken roadway remain clearly visible behind it as a stable continuity marker.
+
+overall_soundscape:
+Wind and distant structural creaks continue. Rusted steel scrapes over asphalt, the plate gives a low metallic flex under the robot's weight, and compact servos click as the robot steps onto solid ground.
+
+non_diegetic_music:
+Muted strings sustain beneath a measured electronic pulse, with two soft piano notes marking the careful crossing. The phrase continues forward without resolution or fade-out.
+```
+
+---
+
+## 第 04 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the exact robot pose, capsule orientation, broken-road position, camera placement, lighting, and debris state at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the round child-height body, chipped ivory-white enamel, single cyan-blue eye, articulated metal limbs, and sealed capsule with one two-leaf sprout.
+<Subject 2> is the autonomous patrol machine from <Picture 3>, preserving its large low-slung quadrupedal body, exactly four long jointed legs, dented dark armor, exposed pistons and cables, rusted surfaces, wedge-shaped sensor head, and single horizontal red scanning light.
+<Subject 3> is the ruined city from <Picture 4>, preserving the sandy roadway, collapsed concrete structures, broken elevated infrastructure, and dusty amber atmosphere.
+
+summary:
+[keyframe completion + reference generation] The target video begins exactly from <Picture 1>. A red scanning beam crosses <Subject 1>, causing it to turn, while <Subject 2> rises from distant debris and locks onto the robot. The shot ends before the chase begins.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening frame retains the robot's stance, capsule state, broken road, metal plate, camera, lighting, and object placement exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - the robot's identity, one blue eye, worn ivory finish, proportions, and protected living sprout remain unchanged.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the four-legged structure, red sensor, dark rusted armor, pistons, cables, and predatory low stance are retained.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the ruined avenue, debris field, sand, dusty depth, and warm directional light remain consistent.
+
+detailed_description:
+The target video continues in premium cinematic 3D CG stylized realism with physically based worn metal, coherent scale, and matching late-afternoon dust. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> stands beyond the roadway break in the same forward-facing pose, holds the sealed capsule against its chest with both hands, and retains the same camera angle, blue-eye brightness, shadows, plate position, and background debris. A narrow red scanning line enters from behind and sweeps once across the robot's ivory back and the capsule's glass. The robot freezes, then turns its head and upper torso toward the source while keeping both feet planted and the capsule level. The camera pans left with moderate amplitude, revealing <Subject 2> partially concealed beneath a collapsed slab in the middle distance of <Subject 3>. Dust falls from its dented armor as four jointed legs extend and raise the heavy low-slung body. Hydraulic pistons engage in sequence; the wedge-shaped head angles directly toward the robot, and its single horizontal red sensor contracts into a brighter focused line. The camera holds both machines in clear depth: <Subject 1> in the foreground and <Subject 2> behind. During the final half-second, motion stops in a readable confrontation frame. The robot remains turned back with its blue eye visible in profile and the capsule clutched safely to its chest, while the patrol machine crouches with all four feet planted, red sensor locked on target, ready to pursue but not yet moving forward.
+
+overall_soundscape:
+The wind briefly drops beneath a low electrical scan sweep. Sand and small stones fall from the patrol machine as corroded armor shifts, followed by sequential hydraulic hisses, heavy joint locks, and a rising red-sensor tone.
+
+non_diegetic_music:
+The established strings and electronic pulse continue, adding a low percussive throb and a restrained metallic rhythm. Tension increases, but the phrase remains open and does not cadence.
+```
+
+---
+
+## 第 05 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the exact confrontation pose, capsule position, patrol-machine stance, camera placement, composition, lighting, and debris state at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the robot's round child-height body, chipped ivory-white enamel, exactly one cyan-blue eye, compact articulated limbs, and the sealed transparent capsule containing one two-leaf sprout.
+<Subject 2> is the patrol machine from <Picture 3>, preserving the large low-slung quadrupedal body, exactly four long jointed legs, dented dark armor, exposed pistons and cables, wedge-shaped head, rusted surfaces, and single horizontal red sensor.
+<Subject 3> is the ruined city route from <Picture 4>, preserving its sand-covered avenue, broken elevated structures, collapsed towers, industrial debris, and dusty amber light.
+
+summary:
+[keyframe completion + reference generation] Beginning exactly from <Picture 1>, <Subject 1> turns and runs along <Subject 3> while protecting the capsule, and <Subject 2> accelerates behind it. The robot reaches a narrow pipe entrance at the end.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening reproduces both machines' poses, the sensor lock, capsule orientation, camera, light, dust, and surrounding debris exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - identity, single blue eye, worn ivory body, compact proportions, and intact seedling capsule remain stable during motion.
+<Subject 2> (appears in [Shot 1]): fully_preserved - four-legged anatomy, red sensor, armor shape, corrosion, exposed mechanisms, and relative scale remain consistent.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the ruined avenue and industrial structures retain their established geometry, materials, atmosphere, and light direction.
+
+detailed_description:
+The target video continues in premium cinematic 3D CG stylized realism with physically based worn materials, coherent feature-animation motion, and the established amber dust palette. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> remains turned back in the foreground, holding the horizontal capsule tightly against its chest, while <Subject 2> crouches in the distance with all four feet planted and its red sensor locked on the robot. Preserve the exact camera position, road break, plate, shadows, haze, and debris. From this frozen confrontation, the robot snaps its head forward, pivots on one foot, and begins running down the sand-covered avenue through <Subject 3> with short rapid strides. Both arms remain wrapped around the capsule; the glass stays level and the sprout remains intact. The camera becomes a low rear tracking shot, moving with moderate speed behind and slightly beside the robot. <Subject 2> drives forward into pursuit, its four legs striking in a coordinated mechanical gallop as hydraulic pistons compress and extend. It remains several body lengths behind and does not touch the robot. Sand and small stones kick outward beneath both machines, while the red sensor sweeps over nearby surfaces. Ahead, a large broken industrial pipe creates a narrow opening only large enough for <Subject 1>. The robot reaches the pipe and lowers its round body toward the entrance. During the final half-second, it holds a stable crouched pose at the opening with the capsule protected inside the threshold, while <Subject 2> approaches in the background without making contact.
+
+overall_soundscape:
+Fast compact servo whirs and short metallic footsteps are answered by the patrol machine's heavy four-beat impacts, hydraulic hisses, and armor rattles. Sand sprays across broken asphalt as wind rushes through the avenue and the red scanner emits a pulsing electronic tone.
+
+non_diegetic_music:
+Low strings sustain while the electronic pulse accelerates into a firm repeating rhythm, joined by muted industrial percussion. The intensity rises continuously and ends without resolution.
+```
+
+---
+
+## 第 06 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the robot's crouched position at the pipe entrance, the capsule state, the approaching patrol machine, camera placement, lighting, and surrounding debris at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the round ivory body, chipped paint, single cyan-blue eye, compact articulated limbs, and sealed transparent capsule with one two-leaf sprout.
+<Subject 2> is the patrol machine from <Picture 3>, preserving its low quadrupedal form, exactly four jointed legs, dark rusted armor, exposed hydraulics, wedge-shaped head, and single horizontal red scanning light.
+<Subject 3> is the ruined industrial city from <Picture 4>, including the sand-covered pipe, broken roadway, concrete debris, dusty air, and established warm exterior light.
+
+summary:
+[keyframe completion + reference generation] The target video begins exactly from <Picture 1>. <Subject 1> backs into the pipe, turns off its visible light, and remains silent while <Subject 2>'s red scan crosses the entrance before moving away.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening retains the crouched robot, capsule placement, approaching patrol machine, pipe threshold, camera, shadows, dust, and object state exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - identity, one blue eye, worn ivory surfaces, body proportions, and protected seedling capsule remain unchanged.
+<Subject 2> (appears in [Shot 1]): fully_preserved - quadrupedal structure, red scanning light, armor, rust, hydraulics, and scale are retained.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the pipe interior and exterior ruins follow the established industrial materials, sand, atmosphere, and light direction.
+
+detailed_description:
+The target video continues in the same premium cinematic 3D CG stylized realism, with physically based corroded metal, controlled dust, and coherent spatial continuity. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly, including <Subject 1>'s crouched pose at the pipe opening, the capsule protected inside the threshold, <Subject 2>'s position outside, and the same camera height, framing, light, shadows, sand, and debris. The robot backs one short step deeper into the pipe without turning away from the entrance. The camera also moves backward slightly, now looking outward from the dark circular interior. <Subject 1> settles against the inner pipe wall, braces the capsule horizontally between both forearms and its chest, and lowers its head. Its single cyan-blue eye dims smoothly to complete darkness; all small body indicator lights also switch off. The two green leaves remain faintly visible through the capsule in reflected exterior light. Outside, <Subject 2> slows beside the entrance. Its narrow red scanning line sweeps across the pipe rim, moves over the robot's dark silhouette, and continues across the opposite wall without locking. The patrol machine turns its wedge-shaped head away and takes one heavy step past the opening, leaving its rear three-quarter silhouette visible outside. During the final half-second, everything becomes still: <Subject 1> remains completely dark and motionless inside, the capsule held secure, while <Subject 2> faces away from the pipe and its red sensor points down the road.
+
+overall_soundscape:
+The robot's servos stop, leaving a hollow wind resonance inside the pipe and faint settling sand. Outside, heavy metal feet slow to isolated impacts, hydraulics hiss, and the red scan produces a thin moving tone before pointing away.
+
+non_diegetic_music:
+The percussion drops out abruptly, leaving a very low sustained string tone and a slow subdued electronic pulse. The music remains continuous at minimal volume and does not resolve.
+```
+
+---
+
+## 第 07 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the dark robot inside the pipe, capsule placement, patrol machine facing away, camera position, exterior light, and debris state at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the round child-height body, chipped ivory-white enamel, exactly one cyan-blue eye, repair-tool compartments, and sealed transparent capsule with one two-leaf sprout.
+<Subject 2> is the patrol machine from <Picture 3>, preserving its large low quadrupedal body, exactly four jointed legs, rusted dark armor, exposed pistons, wedge-shaped head, and single horizontal red sensor.
+<Subject 3> is the ruined industrial city from <Picture 4>, preserving the pipe, sandy avenue, collapsed steel structures, loose overhead frame, dusty amber light, and abandoned scale.
+
+summary:
+[keyframe completion + reference generation] Beginning exactly from <Picture 1>, <Subject 1> throws a blinking maintenance beacon beneath a loose steel frame. <Subject 2> follows it, and the frame falls around the patrol machine, trapping it without destroying it.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening reproduces the robot's dark hiding pose, capsule state, patrol-machine orientation, pipe framing, light, dust, and debris exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - the robot's identity, single blue eye, worn ivory construction, tool compartment, and intact seedling capsule remain consistent.
+<Subject 2> (appears in [Shot 1]): fully_preserved - its four-legged silhouette, armor, red sensor, hydraulics, corrosion, and scale are retained; it is restrained but not damaged beyond the existing wear.
+<Subject 3> (appears in [Shot 1]): fully_preserved - industrial ruins, loose steel frame, roadway, sand, dust, and directional lighting remain coherent.
+
+detailed_description:
+The target video continues in premium cinematic 3D CG stylized realism with physically based aged materials, clear feature-animation action, and matching late-afternoon dust. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> is dark and motionless inside the pipe with the capsule secured against its chest, while <Subject 2> stands outside facing away. Preserve the exact camera position, pipe rim, scan direction, shadows, sand, and surrounding debris. The robot's single eye relights at low cyan intensity. Keeping its left arm firmly around the capsule, it opens a small right-side tool compartment, removes one compact round maintenance beacon, activates a blinking blue-white light, and rolls it out of the pipe. The camera pans with the beacon as it travels across the sand and stops beneath a visibly loose rectangular steel support frame. <Subject 2>'s red sensor snaps toward the moving light. The patrol machine pivots and lunges two strides toward it. Its front feet enter the frame's unstable base; the support shifts, and the corroded rectangular structure drops around the quadruped with a heavy controlled collapse. Dust expands but does not obscure the final state. <Subject 2> remains intact, upright, and pinned between crossed steel members, unable to advance. <Subject 1> steps just outside the pipe, still holding the capsule safely. During the final half-second, both settle into a stable wide composition: the robot watches from a safe distance while the trapped patrol machine's red sensor remains visible behind the fallen frame.
+
+overall_soundscape:
+A tool compartment clicks open, the small beacon chirps and rolls across grit, and the patrol machine pivots with hydraulic snaps. Rusted steel groans, falls with a heavy impact, and sends sand and small debris settling around the trapped machine.
+
+non_diegetic_music:
+The electronic pulse returns and accelerates with muted industrial percussion, then holds on a sustained low-string note after the trap falls. The score does not conclude and remains ready to continue.
+```
+
+---
+
+## 第 08 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the robot outside the pipe, protected capsule, trapped patrol machine, fallen frame, camera placement, composition, and light at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the round child-height body, chipped ivory-white enamel, single cyan-blue eye, articulated limbs, and sealed transparent capsule containing one two-leaf sprout.
+<Subject 2> is the ruined city exterior from <Picture 4>, preserving sand, concrete debris, dusty amber atmosphere, and abandoned industrial scale.
+<Subject 3> is the domed greenhouse from <Picture 5>, preserving its geodesic steel framework, dusty cracked glass, broad entrance, corroded mechanisms, and dormant interior geometry.
+
+summary:
+[keyframe completion + reference generation] The target video begins exactly from <Picture 1>. <Subject 1> leaves the trapped patrol machine behind, reaches <Subject 3>, inserts one hand into the old entrance control, and opens the greenhouse door.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening preserves the robot, capsule, trapped-machine silhouette, collapsed frame, pipe, camera, light, and debris exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - identity, one blue eye, worn ivory finish, proportions, and intact seedling capsule remain unchanged.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the exterior city retains its sand, ruins, dust, scale, and warm directional light.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the greenhouse dome, corroded steel, dusty glass, entrance geometry, and dormant interior character are retained.
+
+detailed_description:
+The target video continues in the same premium cinematic 3D CG stylized realism with physically based worn surfaces and a controlled transition from the amber wasteland exterior toward the cool greenhouse interior. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly, including <Subject 1>'s position outside the pipe, the capsule held against its chest, the fallen steel frame, the distant trapped patrol-machine silhouette, all lighting, camera height, dust, and debris. The robot turns away from the trap and moves forward. The camera tracks beside it as the ruined exterior of <Subject 2> recedes and the immense glass dome of <Subject 3> fills the frame. Maintain the robot's exact proportions and keep the capsule level throughout. At the sealed greenhouse entrance, the robot stops beside a weathered mechanical access socket. It shifts the capsule securely into the crook of its left arm, inserts its right hand into the socket, and rotates the corroded control with visible effort. Old gears engage. The two greenhouse doors separate slowly along their tracks, releasing a cool blue shaft of interior light and a small cloud of trapped dust. The robot withdraws its hand and returns both arms around the capsule. During the final half-second, the doors reach a fully open, stable position. <Subject 1> stands centered at the threshold, facing into the dark greenhouse with the capsule against its chest, warm wasteland light behind and cool interior light ahead, forming a clean first-frame anchor for entry.
+
+overall_soundscape:
+Exterior wind continues behind the robot as its footsteps approach the greenhouse. A corroded control grinds, old gears catch in sequence, and the heavy doors scrape along metal tracks while enclosed air exhales softly from the opening.
+
+non_diegetic_music:
+The industrial percussion recedes while sustained strings broaden and the electronic pulse slows. A few higher piano tones enter as the doors open, but the harmony remains unresolved and continues onward.
+```
+
+---
+
+## 第 09 段 H3 完整提示词
+
+```text
+ subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the robot at the open greenhouse threshold, capsule position, door state, camera placement, warm exterior light, cool interior light, and composition at 0.00 seconds.
+<Subject 1> is the maintenance robot and seedling capsule from <Picture 2>, preserving the robot's round child-height body, chipped ivory-white enamel, exactly one cyan-blue eye, articulated limbs, and the sealed transparent capsule with one two-leaf green sprout.
+<Subject 2> is the abandoned greenhouse interior from <Picture 5>, preserving the geodesic steel dome, dusty cracked glass, concentric dry planting beds, dormant pipes, hanging cables, central circular planting cradle, weathered control pedestal, and clear central walkway.
+
+summary:
+[keyframe completion + reference generation] Beginning exactly from <Picture 1>, <Subject 1> enters <Subject 2>, walks to the central planting cradle, and seats the capsule securely in the empty circular receiver.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening reproduces the robot's threshold pose, capsule orientation, door position, camera, composition, and two-direction lighting exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - identity, single blue eye, worn ivory surfaces, proportions, and intact two-leaf seedling capsule remain consistent.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the dome geometry, planting-bed arrangement, pipes, dry soil, central cradle, control pedestal, dust, and cool dormant lighting are retained.
+
+detailed_description:
+The target video continues in premium cinematic 3D CG stylized realism with physically based aged materials, coherent spatial geometry, and a controlled transition into cool pre-dawn greenhouse light. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> stands centered at the fully open greenhouse threshold, the capsule held horizontally against its chest, with warm amber wasteland light behind and cool blue interior light ahead. Preserve the exact camera position, door state, shadows, dust, robot posture, eye brightness, and capsule orientation. From this state, the robot takes several short deliberate steps down the central walkway into <Subject 2>. The camera tracks backward at the robot's walking speed, maintaining a frontal medium-wide view while the symmetrical concentric planting beds and geodesic dome expand around it. The dry beds contain no vegetation. Fine dust moves beneath the robot's feet; the capsule remains level, and the living sprout stays intact. Reaching the central circular cradle, the robot stops, bends its knees, and carefully lowers the capsule with both hands into the empty receiver. Metal guide rings align around the capsule ends, and a mechanical collar closes once with a visible secure lock. The robot releases its fingers only after the capsule is stable. During the final half-second, the camera holds a clean composition: the capsule sits horizontally and firmly locked in the central cradle, the two-leaf sprout is clearly visible, and <Subject 1> stands beside the nearby control pedestal, facing it with both hands free.
+
+overall_soundscape:
+The exterior wind becomes muffled inside the dome, replaced by a large quiet interior resonance. Small footsteps echo along the walkway, dry grit shifts, the capsule touches the cradle with a soft glass-and-metal contact, and the locking collar closes with one firm mechanical click.
+
+non_diegetic_music:
+Sustained strings and sparse piano continue at a slow tempo, with the electronic pulse softened and spaced farther apart. The harmony opens slightly but remains incomplete, without a final cadence.
+```
+
+---
+
+## 第 10 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the capsule locked in the central cradle, the robot beside the control pedestal, camera position, dome layout, lighting, and all object states at 0.00 seconds.
+<Subject 1> is the maintenance robot from <Picture 2>, preserving the round child-height body, chipped ivory-white enamel, exactly one cyan-blue eye, compact repair-tool compartments, and articulated metal hands.
+<Subject 2> is the seedling capsule originally shown in <Picture 2>, preserving its transparent cylinder, metal end rings, dark soil, and exactly one intact two-leaf green sprout.
+<Subject 3> is the abandoned greenhouse interior from <Picture 5>, preserving the geodesic dome, dusty cracked glass, dry concentric beds, dormant irrigation pipes, central cradle, control pedestal, hanging cables, and cool pre-dawn light.
+
+summary:
+[keyframe completion + reference generation] The target video begins exactly from <Picture 1>. <Subject 1> opens the failed control pedestal, reconnects one loose power cable, and pulls the mechanical start lever until a ring of blue system lights activates.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening keeps the robot, locked capsule, cradle, control pedestal, camera, lighting, and greenhouse layout exactly as generated.
+<Subject 1> (appears in [Shot 1]): fully_preserved - the robot's identity, one blue eye, worn ivory finish, proportions, tools, and articulated hands remain consistent.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the capsule remains locked, sealed, intact, and level with the same living sprout and soil.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the greenhouse structure, dry beds, pipes, central machinery, dust, and cool dormant light retain their established state until activation.
+
+detailed_description:
+The target video continues in premium cinematic 3D CG stylized realism with physically based corroded hardware, precise repair motion, and the established cool greenhouse palette. No text, logos, readable interface characters, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 2> is locked horizontally in the central cradle, <Subject 1> stands beside the control pedestal with both hands free, and the dome, planting beds, pipes, lighting, camera, shadows, dust, and object positions remain unchanged. The robot presses the pedestal's mechanical activation plate once; nothing responds. Its single blue eye narrows slightly in focus. The camera pushes in with small amplitude toward the robot's hands. <Subject 1> opens a small tool compartment at its hip, removes a compact connector tool, and swings open the pedestal's corroded lower access panel. One heavy power cable hangs loose inside. The robot grips the cable, seats it firmly into an empty circular socket, and turns the connector tool once to lock it. It closes the panel, braces both feet, and pulls down the large mechanical start lever with both hands. After a brief resistance, the lever reaches its lowest position. A thin ring of cyan-blue system light activates around the central cradle and travels outward along the first set of dormant pipes. <Subject 2> remains sealed and still. During the final half-second, the robot holds the lever fully down in a stable pose, looking toward the now-glowing cradle while the single blue light ring remains steadily illuminated.
+
+overall_soundscape:
+The empty greenhouse carries faint structural ticks and distant wind against glass. A panel creaks open, a cable connector seats with a heavy click, the lever grinds downward, and dormant relays engage in sequence with a low electrical hum.
+
+non_diegetic_music:
+Low strings hold beneath measured piano notes as the electronic pulse synchronizes with the activating light ring. The volume grows slightly, but the musical phrase remains unresolved and continues into the next segment.
+```
+
+---
+
+## 第 11 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the robot holding the start lever down, the sealed capsule in the glowing cradle, camera placement, blue system-light ring, greenhouse layout, and lighting at 0.00 seconds.
+<Subject 1> is the maintenance robot from <Picture 2>, preserving the round child-height body, chipped ivory-white enamel, exactly one cyan-blue eye, compact proportions, and articulated limbs.
+<Subject 2> is the transparent seedling capsule from <Picture 2>, preserving its metal end rings, dark soil, and exactly one living two-leaf sprout until the system opens it.
+<Subject 3> is the greenhouse from <Picture 5>, preserving its geodesic dome, cracked dusty glass, concentric planting beds, irrigation pipes, central cradle, control pedestal, and established spatial arrangement.
+
+summary:
+[keyframe completion + reference generation] Beginning exactly from <Picture 1>, irrigation restarts, <Subject 2> opens around the planted sprout, and the first concentric bed of <Subject 3> becomes green while <Subject 1> kneels beside it.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening reproduces the lever pose, capsule state, blue light ring, cradle, camera, dome, shadows, dust, and all machinery positions exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - the robot's identity, single blue eye, worn ivory materials, scale, and proportions remain consistent.
+<Subject 2> (appears in [Shot 1]): partially_preserved - the same capsule, soil, and sprout are retained, while the capsule mechanically opens as required by the story.
+<Subject 3> (appears in [Shot 1]): partially_preserved - the greenhouse architecture and spatial layout remain fixed while irrigation activates and the first planting bed changes from dry soil to new growth.
+
+detailed_description:
+The target video continues in premium cinematic 3D CG stylized realism with physically based materials, readable mechanical transformations, and a controlled emergence of natural green within the cool industrial palette. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> holds the start lever fully down, <Subject 2> remains sealed and horizontal in the central cradle, and the cyan-blue system ring glows steadily. Preserve the exact camera, dome geometry, pipe positions, shadows, dust, and pre-dawn light. A deep pump turns over beneath the floor. Blue indicator light travels outward through the irrigation network, and the pipes tremble once as water pressure returns. Fine sprays begin around the first concentric planting bed, darkening the dry soil. The capsule's metal collar unlocks; its clear upper shell separates smoothly and retracts into the cradle, leaving the original two-leaf sprout rooted safely in the central soil chamber. The robot releases the lever, takes one short step to the cradle, and kneels beside the sprout. As water reaches the roots, fresh green shoots emerge visibly but gradually through only the nearest circular bed, forming a coherent ring rather than an instant jungle. The original sprout lifts its two leaves toward the growing warm light. During the final half-second, all mechanical movement settles. <Subject 1> remains kneeling beside the uncovered sprout, its blue eye focused on the new leaf, while the first planting ring is evenly green and the rest of the greenhouse remains mostly dormant for the final transformation.
+
+overall_soundscape:
+A deep pump starts with a low rotating rumble, followed by pipes knocking once and water rushing through old channels. Fine irrigation spray falls onto dry soil, the capsule collar unlocks mechanically, and droplets patter softly around the kneeling robot.
+
+non_diegetic_music:
+The strings widen into higher sustained harmonies while piano notes become more frequent and the electronic pulse softens beneath them. The score swells toward resolution but deliberately withholds the final cadence.
+```
+
+---
+
+## 第 12 段 H3 完整提示词
+
+```text
+subject_definitions:
+<Picture 1> is the first frame of [Shot 1], taken from the preceding segment's actual final frame and defining the kneeling robot, uncovered two-leaf sprout, green first planting ring, dormant outer beds, camera placement, lighting, machinery state, and greenhouse composition at 0.00 seconds.
+<Subject 1> is the maintenance robot from <Picture 2>, preserving the round child-height form, chipped ivory-white enamel, exactly one cyan-blue eye, scratched articulated limbs, and friendly compact silhouette.
+<Subject 2> is the original living sprout from the capsule in <Picture 2>, preserving its identity and vivid natural green color as it develops one white flower.
+<Subject 3> is the greenhouse from <Picture 5>, preserving the geodesic steel dome, cracked dusty glass, concentric beds, irrigation pipes, central cradle, control pedestal, walkway, and overall spatial geometry while the environment becomes fully alive.
+
+summary:
+[keyframe completion + reference generation] The target video begins exactly from <Picture 1>. Green growth spreads through <Subject 3>, morning sunlight fills the dome, <Subject 2> opens one white flower, and <Subject 1> rises to watch in the final wide composition.
+
+retention_analysis:
+<Picture 1> ([Shot 1] first frame): fully_preserved - the opening reproduces the kneeling robot, sprout, first green ring, outer dry beds, camera, light, water, machinery, and greenhouse layout exactly.
+<Subject 1> (appears in [Shot 1]): fully_preserved - identity, single blue eye, worn ivory finish, scale, and compact proportions remain unchanged.
+<Subject 2> (appears in [Shot 1]): partially_preserved - the same sprout and green color are retained while one new white flower naturally opens at its tip.
+<Subject 3> (appears in [Shot 1]): partially_preserved - the dome, beds, pipes, cradle, pedestal, and spatial layout remain fixed while living plants and morning illumination transform the previously dormant environment.
+
+detailed_description:
+The target video completes the premium cinematic 3D CG stylized-realism sequence with physically based worn industrial materials, controlled organic growth, and a warm hopeful transition from cool pre-dawn blue to golden morning light. No text, logos, borders, or watermarks appear.
+[Shot 1] At 0.00 seconds, reproduce <Picture 1> exactly: <Subject 1> kneels beside the uncovered original sprout, the first concentric planting ring is evenly green, the outer beds remain dry, and all camera, dome, pipe, cradle, water, light, shadow, and machinery states match the actual preceding final frame. Irrigation continues outward in successive rings. Fresh low plants emerge through the next beds in visible flowing waves, and slender green vines climb several nearby steel supports without changing the greenhouse geometry. The transformation remains organized and physically connected to water reaching each area, never appearing as a sudden random explosion. The camera slowly pulls out with moderate amplitude and gently rises, revealing more of the circular interior. <Subject 1> pushes up from its kneeling pose and stands beside the central cradle, keeping the same body proportions and worn surfaces. At the center, <Subject 2> straightens, forms one small bud, and opens exactly one delicate white flower. Simultaneously, the sun clears the ruined skyline outside; a broad warm beam enters through the dusty dome and spreads across the robot, flower, wet paths, and newly green beds. The robot's single cyan-blue eye reflects the white petals and golden light. During the final half-second, growth and camera motion stop completely on a stable wide hero frame: <Subject 1> stands beside the single white flower, surrounded by the revived greenhouse, with morning light filling the dome and no remaining narrative motion.
+
+overall_soundscape:
+Water flows steadily through restored channels as irrigation spray moves outward across the beds. Leaves rustle softly, droplets strike glass and soil, old greenhouse structures settle with gentle metallic ticks, and the robot's servos hum as it stands.
+
+non_diegetic_music:
+Full warm strings expand over clear piano chords at a moderate-slow tempo, while the electronic pulse resolves into a soft sustained tone. The music reaches its first complete cadence as the flower opens, then gently decreases in volume through the final frame.
+```
