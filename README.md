@@ -1,0 +1,52 @@
+# Director Skill — AI 导演工作流（DSH / Windows 版）
+
+> 私人仓库 · 仅自己使用与更新
+
+AI 导演工作流 Skill：拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、**MiniMax H3 视频生成（分段 V6 主流程）**、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。
+
+## 目录结构
+
+```
+director/
+├── SKILL.md                  # 主 Skill（当前 v1.7.0）
+├── references/
+│   ├── 3-2-workflow/         # 3+2 导演工作流学习材料（超哥分镜导演 SD2.0 等）
+│   ├── h3-prompt/            # H3 提示词规范（官方指南、prompt-builder、精通指南）
+│   └── h3-segmented/         # H3 分段长视频扩展（V6 手册 + 12 段 demo 提示词）
+└── .gitignore
+```
+
+## 版本历史
+
+| 版本 | 内容 |
+|---|---|
+| 1.5.2 | 单段 H3 r2v 手搓管线（minimax_h3_r2v_prompt_expand） |
+| 1.6.0 | 引入 H3 分段参考生视频（Impact V6）作为长视频扩展（2c 章节） |
+| **1.7.0** | **V6 分段替换为主流程**（2b 重写：单段/多段统一走 V6）；标准操作步骤 10 步；避坑清单 30–34；成片改 concat 无缝拼接；本机两段 Latent 衔接实测 |
+
+## 更新流程（重要）
+
+每次用后把新教训/新功能更新进 skill，然后推送到本仓库：
+
+```powershell
+cd C:\Users\Administrator\.agents\skills\director
+
+# 1. 查看改动
+git status
+git diff --stat
+
+# 2. 提交（版本号建议同步递增：SKILL.md frontmatter 的 version 字段）
+git add .
+git commit -m "vX.Y.Z: <本次更新摘要>"
+
+# 3. 推送
+git push
+```
+
+> 自动推送脚本可选：`git add . && git commit -m "update $(Get-Date -Format 'yyyy-MM-dd HH:mm')" && git push`（慎用，避免垃圾提交）。
+
+## 注意
+
+- Skill 内包含**本机路径**（`D:\ComfyUI-H3`、`C:\Users\Administrator\ComfyUI`、`D:\download\ComfyUI_models` 等）与实测参数——私人仓库可接受，**勿公开**。
+- 第三方资料（MiniMax 官方提示词指南、超哥分镜导演 SD2.0、南极来の企鹅 H3 分段工作流说明）仅作个人参考，未获再分发授权，勿将本仓库设为 public。
+- H3 分段工作流（Impact V6）版权归 B站UP 南极来の企鹅 与 抖音 Theodore，仅允许非商业行为与传播，分享请注明出处，禁止倒卖。

@@ -12,7 +12,7 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 # AI 导演 Skill（DSH / Windows 版）
 
 用户说"拍个 XX 广告""AI导演""做个 30 秒宣传片""出一套广告物料"时触发。
-当用户说"更新导演skill"时，用最新一次拍摄的教训修订本文件。
+当用户说"更新导演skill"时，用最新一次拍摄的教训修订本文件，并推送到 GitHub 私人仓库（`C:\Users\Administrator\.agents\skills\director` → `git add . && git commit -m "vX.Y.Z: 摘要" && git push`；记得同步递增 frontmatter 的 `version`）。
 
 ## 工作流路由规则（用户明确要求，Z-Image 系列）
 | 场景 | 工作流 | 说明 |
