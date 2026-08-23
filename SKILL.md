@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.10.0
+version: 1.10.1
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -215,6 +215,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 32. **API 模式不自动续段**：ImpactQueueTrigger 是前端钩子（依赖浏览器事件），纯 `/prompt` API 提交不会触发下一段——脚本自动化只能逐段手动提交（改段号/换 prompt 依次 POST）；GUI 页面才能点一次 Queue 自动跑完。
 33. **同 seed 同输入命中节点缓存**：复现/测试时相同节点输入会缓存（`execution_cached`），SaveLatent 等"秒回成功"不代表重新生成——看 `history` 里 `execution_cached` 的节点列表区分。
 34. **ComfyUI-Manager 启动联网超时会崩服务**：受限网络下 Manager 启动 fetch `custom-node-list.json` 等反复超时甚至拖垮进程；`user/__manager/config.ini` 设 `network_mode = private` 规避。
+35. **V6 分段 API 模式：中间段必须保存本段 Latent**（2026-08-24 实测踩坑）：API 逐段提交时，**首段**挂 SaveLatent、**末段**不用挂；但**中间段（第 2..N-1 段）必须同时挂 SaveLatent（`clip_index=当前段号`）+ LoadLatent（`clip_index=上一段号`）**——只抄 build_2seg_test 的两段模式会导致中间段不存 latent，下一段 LoadLatent 找不到 `clip_0000N` 报错，整链断裂。本机每段模型重载（TE 14.9GB + UNET 19.9GB CPU 量化 + TurboLoRA 208 模块合并）约 35–60 分钟，**链断重跑代价极高**——先想清楚再提交。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
