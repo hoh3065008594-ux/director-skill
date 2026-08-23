@@ -1,0 +1,22 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1344
+PlayResY: 768
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: CN,Microsoft YaHei,52,&H00E8E4DC,&H00E8E4DC,&H00151210,&H96000000,0,0,0,0,100,100,2,0,1,2,0,2,120,120,120,1
+Style: EN,Georgia,34,&H00C9A36B,&H00C9A36B,&H00151210,&H96000000,0,0,0,0,100,100,8,0,1,2,0,2,120,120,130,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.80,0:00:04.50,CN,,0,0,0,,清晨的第一件事，是让光进来
+Dialogue: 0,0:00:05.50,0:00:09.10,CN,,0,0,0,,然后是睡袍，慢慢滑落
+Dialogue: 0,0:00:09.80,0:00:13.30,CN,,0,0,0,,指尖路过的地方，蕾丝都知道
+Dialogue: 0,0:00:14.00,0:00:17.60,CN,,0,0,0,,光沿着身体，画了一条线
+Dialogue: 0,0:00:18.30,0:00:21.90,CN,,0,0,0,,穿在里面的温柔，不必解释
+Dialogue: 0,0:00:22.60,0:00:25.90,CN,,0,0,0,,蕾丝，是光的形状
+Dialogue: 0,0:00:26.60,0:00:30.20,CN,,0,0,0,,ÉLYSÉE · 肌肤记得的温柔
+Dialogue: 0,0:00:27.00,0:00:30.00,EN,,0,0,0,,Tenderness the Skin Remembers
