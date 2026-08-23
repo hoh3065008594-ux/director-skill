@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.11.0
+version: 1.12.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -150,6 +150,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
   9. **取产物**：`ComfyUI/output/MiniMaxH3_segments/<运行名>/` 下每段独立 MP4（`segment_N_*.mp4`）+ 尾帧 PNG + `latent_context/clip_N.safetensors`；按段号排序，进 concat 无缝拼接（见成片章节）或逐段审片。
   10. **提速/调画质**：单采版省一半时间；Turbo LoRA 已内置；双采（RTX 1.5×）出更高清但约 2 倍耗时；LowVRAM Attention 建议 4 或 8（56 头整除）。
 - **双采（v5+）**：RTX 视频超分 1.5× → 同模型二采；LoRA Strength 0.3–0.55、denoise 0.2–0.35（对口型 ≤0.30）、3 步、res_multistep+simple、shift 12/3；最终视频用第一采音频。节点已装，**未做全量双采实测**。
+- **本机实测（2026-08-24 · 30s 广告全流程）**：7 段 Latent 链（段1 5.167s + 段2–7 各 4.25s = **30.7s**）完整跑通；热缓存下每段执行 271–293s，段2 中断后热重跑仅 42s；两处大坑——①双实例同开爆 RAM（见避坑 36）②中间段 SaveLatent 链断（见避坑 35）。**字幕时间轴**按 concat 累计时长推算（段1 0–5.17 → 段2 5.17–9.42 → …），收尾两段式产品特写（纯产品→上身穿着）各配一句字幕再落品牌；合成用相对路径避免中文路径（避坑 38）。工作区参考：`D:\dsh web 工作区\lingerie-ad-30s\`（.comfy 内 gen_h3_v6.js / build_final.js / subs.ass 为可复用模板）。
 - **本机实测（2026-08-23）**：段1 124 帧 5.17s（230s，含音频）；段2 LoadLatent + MotionContext(22帧/24音频) + Trim → **102 帧 4.25s（280s）**，Latent 衔接链路全通。坑：latent 路径约定（Save prefix 以 `/clip` 结尾、Load 传目录 `.../latent_context` + `clip_index=段号`）；`context_length` 是 COMBO 枚举**必须传字符串**（如 `"22"`）。产物副本 `D:\dsh web 工作区\h3-segmented-workflow\test-output\2seg_segment1_5.17s.mp4` / `2seg_segment2_4.25s.mp4`（预览 `preview_2seg.html`）。完整手册 `references/h3-segmented/segmented-workflow-v6.md`，12 段 demo 提示词 `references/h3-segmented/demo_prompts_12segments.md`。
 - 交互通道：用 **HTTP**（`/upload/image` 上传参考图、`/view` 取回产物）避免跨工作区文件写；若实例 `--output-directory` 已指向项目则产物直落 `assets/video/clips`。
 - 重拍路由：面板 `video-*` 键 → `gen_h3_r2v.js`（带该镜提示词）；写 `regen-video-<scene>.json` 标记。
@@ -217,6 +218,12 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 33. **同 seed 同输入命中节点缓存**：复现/测试时相同节点输入会缓存（`execution_cached`），SaveLatent 等"秒回成功"不代表重新生成——看 `history` 里 `execution_cached` 的节点列表区分。
 34. **ComfyUI-Manager 启动联网超时会崩服务**：受限网络下 Manager 启动 fetch `custom-node-list.json` 等反复超时甚至拖垮进程；`user/__manager/config.ini` 设 `network_mode = private` 规避。
 35. **V6 分段 API 模式：中间段必须保存本段 Latent**（2026-08-24 实测踩坑）：API 逐段提交时，**首段**挂 SaveLatent、**末段**不用挂；但**中间段（第 2..N-1 段）必须同时挂 SaveLatent（`clip_index=当前段号`）+ LoadLatent（`clip_index=上一段号`）**——只抄 build_2seg_test 的两段模式会导致中间段不存 latent，下一段 LoadLatent 找不到 `clip_0000N` 报错，整链断裂。本机每段模型重载（TE 14.9GB + UNET 19.9GB CPU 量化 + TurboLoRA 208 模块合并）约 35–60 分钟，**链断重跑代价极高**——先想清楚再提交。
+36. **双 ComfyUI 实例同开会爆内存（2026-08-24 实测）**：H3 实例（常驻 ~15GB RAM）+ 主实例（Z-Image ~8GB）同开 → 空闲 RAM 跌破 5GB → H3 采样报 `SamplerCustomAdvanced: HostBuffer.read_file_slice failed`、主实例报 `os error 1455 页面文件太小`，任务白跑 5-10 分钟才报错。**出图与视频必须错峰**：Z-Image 出图时停 H3；H3 分段生成期间关掉主实例（出完图立刻 kill，宁可之后重启）。
+37. **H3 冷热加载差异巨大（2026-08-24 实测）**：冷加载（TE 14.9GB 量化 + UNET 19.9GB staging + TurboLoRA 208 模块合并）约 35–60 分钟/段；**热缓存**（模型常驻 RAM，如刚跑完上一段）下段执行仅 42s–5min（实测：段2 中断后热重跑 42s；段4–7 各 271–293s）。**分段生成不要中断、连续跑完最省时**；中断后再启 = 60 分钟级冷加载。
+38. **libass/filter 路径禁中文**：subtitles/fontsdir 传含中文的绝对路径 → `No option name near ...` 解析失败；解法：ffmpeg `cwd` 指向项目 `.comfy`，用**相对路径**（`subtitles=subs.ass:fontsdir=fonts`）；字体复制到项目 `.comfy/fonts/`（msyh.ttc 等），ASS 里字体名用"Microsoft YaHei"比思源体名稳。
+39. **审片门禁（2026-08-24 教训）**：关键帧/片段生成后**必须先过审片页定稿（picks.json）再进入下一阶段**；跳过用户确认直接开跑 → 返工代价高（本会话 SC.06 脸部→产品特写改了两轮、重跑 2 段视频 + 重拼母版）。
+40. **重跑同名产物递增**：同前缀重跑 SaveVideo 会生成 `_00002_`（不覆盖）；脚本取文件必须按数字后缀取**最新**，或先清理旧产物（`segment_6_00001_` 与 `00002_` 同时存在时 `readdir` 排序取错会用到旧版）。
+41. **人物类项目先出角色三件套**（整体母版/三视图/脸特写）再谈场景——见 §1b 硬性门槛；跳过它必然跨镜人物漂移，返工成本远高于先做资产。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
