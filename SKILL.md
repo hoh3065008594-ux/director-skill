@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio.
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.7.0
+version: 1.8.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -56,6 +56,18 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 - **状态图**：基于已确认角色图继续生成不同状态（开场造型、受伤、情绪等）；用户可对话式修改（"她应该戴帽子"）在同一形象上迭代。
 - **三视图**：关键角色/产品确认后生成三视图，供各镜统一视角。
 - **道具资产**：只保留**重复出现**的道具，单次出现的自动排除。
+
+### 1b-2 场景资产构建（3+2 工作流 3.0 · 第 2 期精华）
+- **顺序铁律**：场景清单 → 室外拓扑图 → 室外节点图 → 室内户型平面图 → 室内节点图（宫格图）→ 色卡；**顺序错了，后面每张图各画各的必然出错**。
+- **场景清单**：按**剧本事件节点**列出场景（不是按地点随手列）。
+- **室外拓扑图（第一张图，不是任何具体场景）**：先定死空间关系——各场景位置、彼此距离、坡向、人物整条动线；拓扑确认后再分室外/室内两路生成。
+- **室外**：按节点分开出图（例：雪林下坡 / 林缘坡角 / 从坡角反打的农舍）。
+- **室内户型平面图（室内一致性最关键一张）**：不直接画房间图，先做平面图——人物每次从哪个门进、哪个方向走、下一场景该出现在哪；**缺它空间关系无法保证，人物会"在自己家里迷路"**。
+- **宫格图（单房间一致性解法）**：以当前室内图为基准，把房间空间关系在内部推演一遍，一次性生成各角度——正打 / 反打 / 左右侧 / 后续特写机位。
+- **色卡**：室内、室外**各一套**，为视频环节光影/色调不漂移保驾护航；**人物匹配音色**也一并准备好，才算完整资产包。
+- **金句**：资产决定作品上限，提示词只能决定下限。
+- **参考图/算力提醒（Seedance 评论区实测）**：参考图占用单段视频算力（按时长分配），过大（4K）/过多参考图都会削减算力——**一张反打图就足够**。
+- 完整笔记：`references/3-2-workflow/6_scene-assets-episode.md`（口播全文 `transcript-scene-assets.txt`）。
 
 ### 1c. 风格锁定（STYLE_TOKEN）
 - 需求对齐后先锁定画风，**锁定后全程不可改**。三层结构（缺一不可，禁止"高级/有感觉/独特"等模糊词）：
@@ -201,8 +213,10 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 - 技能目录：`C:\Users\Administrator\.agents\skills\`
 
 ## 学习参考（3+2 工作流 3.0，存于 `references/3-2-workflow/`）
-- `LEARN-NOTES.md` — 学习笔记总览：视频核心提炼 + 五个开源材料摘要 + 已融入本 skill 的点 + 待跟进（下期"场景资产构造"）
-- `transcript.txt` — 原视频口播全文（funasr 转写，329s）
+- `LEARN-NOTES.md` — 学习笔记总览：两期视频核心提炼（角色资产 + 场景资产）+ 五个开源材料摘要 + 已融入本 skill 的点 + 待跟进
+- `transcript.txt` — 第 1 期（角色资产）原视频口播全文（funasr 转写，329s）
+- `6_scene-assets-episode.md` — **第 2 期（场景资产）要点**：场景清单→室外拓扑图→室外节点图→户型平面图→室内宫格图→色卡的六步流程 + 金句 + 评论区算力技术点（已融入 1b-2）
+- `transcript-scene-assets.txt` — 第 2 期（场景资产）口播全文（funasr 转写 + 校对，150s）
 - `1_tvc-ai-director.md` — TVC 广告导演 Skill Suite 全文（brief→创意→阐述→PPM→分镜→prompt→统筹→剪辑→审片→路由）
 - `2_ai-director-skill.md` — AI 短片「导演层」全文（故事功能分析→连续性→风格翻译→三锁→镜头卡→QA）
 - `3_minimax-h3-broll.md` — MiniMax-H3 口播 B-roll 全文（T01-T21 模板、v1/v2/v3、安全门禁）
