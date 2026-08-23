@@ -1,8 +1,8 @@
 ---
 name: director
-description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio.
+description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.8.0
+version: 1.9.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -85,6 +85,17 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 - **运镜词库（禁止造词，除 FPV/POV 外禁用英文）**：固定/手持；平移（向前推进/向后拉远/左右横移/垂直升降/跟随主体）；旋转（左右水平旋转/快速甩镜/仰摇俯摇/滚转）；变焦（缓缓推近/拉远）；环绕（缓慢左右环绕）；航拍（垂直上升俯视/低空贴地/俯冲锁定/FPV）；特殊（POV/升格慢动作/降格快动作）。
 - **导演法则**：视线法则（视线朝向目标 → 紧跟展示目标的镜头）；威胁切镜法则（威胁源与受威胁者镜头交替）；复杂动作拆解（蓄力/接近 → 接触/爆发 → 物理反馈/结果）；台词必切说话人面部；每批≥2镜、有台词批≥3镜。
 - **H3 口播 B-roll 模板（T01-T21）**：T01 结论金句 / T02 概念隐喻 / T03 数字冲击 / T04 证据摘录 / T05 流程关系 / T06 用户反馈 / T07 章节概览 / T08 口播叠加转全屏 / T09 3D 空间层次 / T10 关键词条 / T11 多条件交集 / T12 组织系统 / T13 对话交锋 / T14 双边对比 / T15 证据链路 / T16 人物档案 / T17 3D 组装 / T18 地理网络 / T19 技术演进 / T20 能力树 / T21 机制原理。文字预算分级：v1 ≤12字符（准确率优先）/ v2 ≤28字符（表现力优先）/ v3 ≤18字符（平衡推荐）；每镜一个核心语义、同屏≤2组辅助信息、文字正对镜头稳定≥1.5秒。
+
+### 1e. 电影感镜头判断（cinema-dna-21x9x3 融合 · v1.2.2）
+用户要求"电影感""像电影截图""21:9 三联""不要广告/游戏/CG 感"，或要"随机发散选题材"时，在写分镜与出图前启用本层（完整规范见 `references/cinema-dna/`；示例三联图在工作区副本 `D:\dsh web 工作区\cinema-dna-21x9x3\examples\`）：
+- **构图来自关系压力，不来自模板**：先判断——谁在看谁、谁知道得更多、谁正在离开谁还在等待、人物被什么空间结构限制、观众位于事件内部/外部/错误一侧、画面里什么比人物更有权力；再选 1 个主要构图机制（最多 1 个辅助）。禁止直接抽"远景-中景-特写/门框/居中/负空间"模板。
+- **每帧先写一句"视线流量"**：`视线从 A 进入，被 B 放慢或遮挡，落到 C，最后被 D 带走，边缘/反射/失焦保留未解释信息`。一句话写不清 = 构图只是元素堆叠，必须重写；同组三帧的流量不得重复。
+- **受控随机**：用户说"随机/发散"时，先做 LLM 内部分析（题材运动方向、角色-环境权力关系、观看立场、题材最独特的视线入口/阻断点/落点/出口、上一组已用套路），再受控随机——1 观看立场 + 1 视线入口 + 1 阻断/加速 + 1 落点 + 1 余韵出口 + 1 焦段；随机结果必须能被题材解释，否则重新随机；至少生成 3 套候选流量，选最不套路的一套。
+- **色彩命题**：每组先定一句"色彩命题"（如"一块褪色朱红在大面积潮湿青灰中持续存在""午后奶油黄逐渐被室内病态绿色吞没"）；色彩必须来自服装/墙体/天气/实景灯/水面雪地玻璃植物反射/时代材料。不默认蓝灰阴冷，不靠后期滤镜制造高级感。
+- **三联叙事节奏**：默认输出 3 张独立 21:9（或 2.39:1）单帧 → 纵向拼接成三联；黑色间隔 8–12px；不加字幕/序号/水印/装饰边框。每组必须有一个"可被推断但未完全解释"的事件（迟到但座位仍留着/仪式开始但执行人拒绝盖章/船已靠岸乘客撕掉登船凭证/战斗结束胜利者发现桌上只剩自己的旧物）。**第三张不许默认"空房间+物件+余韵"**——可以是身体压力后的喘息、群体视线或集体反应、关系站位发生变化、现场继续运行、规则被临时改写、人物没有解释但行动已变。
+- **反 CG/反 AI 检查**（出图后逐帧过）：排除史诗云层、魔法裂光、大量烟雾粒子、过亮轮廓光、玻璃般皮肤、全画面锐利、青橙调色、重颗粒/重色散/重光晕；排除 CG 概念图、游戏宣传图、AI 壁纸、偶像剧/电视剧站位；可做"动画片感/手工木偶感/童话/科幻运动"等方向，但转译成材质/表情/布景/色彩/调度，不复制现成 IP。
+- **与现有流程衔接**：1c 锁画风质感（STYLE_TOKEN），本层锁"叙事性构图"——先完成本层判断，再写 1d 的八层 prompt（构图/流量/色彩命题作为其中 Composition / Color Palette 的输入）；Z-Image 出 21:9 单帧时画布比例相应调整（如 1344×576 级别，拼接按上述规则）；视频三联需求逐镜走 2b（H3 画布 1344×768，三联拼接仅用于静帧/概念图交付）。
+- **可选片名+主题海报阶段**（仅用户明确要求"片名/命名/海报/封面/视觉体系/发布主图"时启用）：按分镜核心冲突生成片名候选 → 选主片名+英文名+logline → 从分镜提炼主视觉符号（不是把三图拼贴）→ 判断电影气质选排版/字体/颜色系统 → 主海报固定 **3:4 竖版**（prompt 必须写 `3:4 vertical poster composition`），16:9/1:1/9:16 仅作视觉体系扩展封面；参考海报只做抽象方法分析（大留白/标题压人物/书写笔触/文字穿插景深/单色底+高饱和点睛色/胶片颗粒/旧纸感），不复用其版式、片名、IP、人物关系、字体轮廓；直接画字只用一个短片名并预留后期校正空间，准确文字优先排版工具叠加。
 
 ### 2. 本地出图（ComfyUI + Z-Image）
 探测本机环境（本机已知：ComfyUI 在 `C:\Users\Administrator\ComfyUI` 与 `D:\ComfyUI-H3`，模型库 `D:\download\ComfyUI_models`，GPU RTX 4070 SUPER 12GB + 32GB RAM）：
@@ -238,3 +249,9 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 - `segmented-workflow-v6.md` — **Impact V6 分段工作流完整手册**：何时用分段、v1–v6 版本对比、Latent 传递原理、依赖节点/模型、整段脚本格式、运行流程、双采参数、加速节点、故障排查
 - `demo_prompts_12segments.md` — **12 段 × 5s 完整 demo**《机器人与沙漠温室中的希望之种》(60s)：六段式提示词逐段全量范例（v2 尾帧编号格式；V6 使用时应去掉尾帧指代、全部指代固定参考图）
 - 资源包：`D:\dsh web 工作区\h3-segmented-workflow\`（workflows v1–v6 JSON、7 节点 .rar、demo、官方提示词指南）；RunningHub 体验页 https://www.runninghub.cn/post/2090022476851007490/
+
+## Cinema DNA 电影感参考（融合自 cinema-dna-21x9x3 v1.2.2，存于 `references/cinema-dna/`）
+- `SKILL.md` — 原技能全文（1218 行）：关系压力构图、视线流量、受控随机、色彩命题、三联剪辑节奏、反 CG/AI/模板化检查、片名与主题海报阶段完整规则（已提炼进 1e）
+- `cinema-dna-full-spec.md` — 完整电影语法规范（48KB）
+- `cinema-dna-v4-anti-ai.md` — 反 AI 电影帧补丁（10.9KB）
+- 来源：GitHub `dacnay816y62-hub/cinema-dna-21x9x3`（公开）；本地工作区副本 `D:\dsh web 工作区\cinema-dna-21x9x3\`（含 examples/ 精选三联示例图，约 87MB，未随本仓库分发）

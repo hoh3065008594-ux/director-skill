@@ -8,11 +8,12 @@ AI 导演工作流 Skill：拍广告/短视频/宣传片/品牌片。从创意�
 
 ```
 director/
-├── SKILL.md                  # 主 Skill（当前 v1.7.0）
+├── SKILL.md                  # 主 Skill（当前 v1.9.0）
 ├── references/
 │   ├── 3-2-workflow/         # 3+2 导演工作流学习材料（超哥分镜导演 SD2.0 等）
 │   ├── h3-prompt/            # H3 提示词规范（官方指南、prompt-builder、精通指南）
-│   └── h3-segmented/         # H3 分段长视频扩展（V6 手册 + 12 段 demo 提示词）
+│   ├── h3-segmented/         # H3 分段长视频扩展（V6 手册 + 12 段 demo 提示词）
+│   └── cinema-dna/           # Cinema DNA 电影感镜头判断（1e 章节源材料：全文/完整规范/反 AI 补丁）
 └── .gitignore
 ```
 
@@ -23,6 +24,7 @@ director/
 | 1.5.2 | 单段 H3 r2v 手搓管线（minimax_h3_r2v_prompt_expand） |
 | 1.6.0 | 引入 H3 分段参考生视频（Impact V6）作为长视频扩展（2c 章节） |
 | **1.7.0** | **V6 分段替换为主流程**（2b 重写：单段/多段统一走 V6）；标准操作步骤 10 步；避坑清单 30–34；成片改 concat 无缝拼接；本机两段 Latent 衔接实测 |
+| **1.9.0** | **融合 cinema-dna-21x9x3（v1.2.2）**：新增 1e 电影感镜头判断——关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选片名+主题海报阶段；源材料入 `references/cinema-dna/`（全文+完整规范+反 AI 补丁） |
 
 ## 更新流程（重要）
 
