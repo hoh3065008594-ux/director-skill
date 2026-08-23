@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.9.0
+version: 1.10.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -166,8 +166,12 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 - 固定资产=定稿母版（4x-UltraSharp，1920×1080 / 海报 1248×1824）；剧本大纲=读 `assets/script-outline.md`。
 - 定稿结果：`picks.json`（confirmed + picks{key:file}），供成片读取。
 
-**独立审片页（备选，无需动态插件审批）**：better-sidebar 插件未运行时可用——
-`node .comfy/serve_review.js`（127.0.0.1:3099，静态文件 + `/api/clips` 列片段、`/api/picks`、`/api/pick` POST 写 `assets/video/picks.json`）→ 浏览器开 `http://127.0.0.1:3099/review.html`：每镜一区、各版本 `<video>` 网格、「选这版」即定稿（金色高亮）、5s 自动刷新（新生成的片段自动出现）。选择全部落 `picks.json`。
+**独立审片页（推荐，无需动态插件审批）**：模板存于 `references/review-panel/`（serve_review.js + review.html + README）。搭建三步：
+1. 拷模板到项目 `.comfy\`，改 serve_review.js 顶部三处：`ROOT`（项目路径）、`SCENES`（scene-01…NN）、`SCENE_META`（每镜名称/字幕）；依赖 `.comfy\gen_zimage.js` + `jobs.json`（重拍按钮用）。
+2. 启动：`node .comfy/serve_review.js`（后台任务）→ 浏览器开 `http://127.0.0.1:3099/review.html`。
+3. 用法：左侧「🖼 图片资产 / 🎬 视频资产 / 📜 剧本大纲」文件夹式浏览 → 场景子文件夹 → 资产；**单击=预览**（原生 `<dialog>`，含该镜提示词）、**Ctrl+单击=选「标准」**、**定稿/撤销**（绿框 + 金色徽章，写 `assets/picks.json`）、**重拍**（新种子版本约 30s，带「新」徽章）、4s 轮询自动刷新（H3 片段自动出现）。
+- API：`/api/assets`（stills+clips+generating+meta）、`/api/picks`+`/api/pick`（POST `{scene,file|null,kind:'still'|'clip'}`）、`/api/prompt`（读 `.txt` 旁注）、`/api/regen`（spawn gen_zimage.js，`regen-still-<scene>.json` 标记）、`/api/outline`（剧本大纲）；静态文件带 HTTP Range 206（视频拖动必需）。
+- 资产命名：图片 `assets/generated/scene-0N_0000M_.png`；视频 `assets/video/clips/segment_N_*.mp4`；定稿 `assets/picks.json` → `{scene:{kind,file}}`，成片阶段读取。
 
 **程序化审片（模型无视觉时）**：`python .comfy/qa_video.py <clip_dir>`——对每段在各时间点提帧算亮度均值/对比度/拉普拉斯清晰度 + 帧间差运动量；音频用 `ffmpeg -af volumedetect -f null NUL` 看 `mean_volume/max_volume`、`ffprobe -select_streams a:0` 判有无音频流。按分镜预期核对（例：黑场开场亮度应低且渐升、奶花绽放镜亮度上升、白场镜亮度≈100、微距特写清晰度低属正常）。ffmpeg 提帧写临时目录会被沙箱拦（image2 I/O error），**临时帧目录必须放项目内**（如 `.comfy/temp/`）。
 
