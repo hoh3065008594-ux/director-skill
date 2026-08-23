@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.10.1
+version: 1.11.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -50,6 +50,7 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 - 剪辑节奏：全片 0.3–0.5× 慢速、无快切、转场 0.8s 交叉溶解、无对白。
 
 ### 1b. 资产账本与人物/产品一致性（3+2 工作流 3.0 精华）
+- **人物类项目硬性门槛（2026-08-24 教训）**：出任何场景前，必须先产出并确认**角色三件套**——① **角色整体图**（母版：全身/七分身，锁定服装、发型、神态与光线基调）② **三视图**（正/侧/背，基于母版垫图生成，供各镜统一视角）③ **脸特写**（正脸近景，供面部一致性）。三件套进资产账本，后续所有含人物镜头**必须以母版/三视图为参考图锚定**，禁止直接用场景草稿当人物参考（否则跨镜人物必然漂移）。用户明确要求"生成人物/角色"时同理先出三件套再谈场景。
 - **先建账本**：项目一开始就建本地账本（`assets/manifest.json` 或目录树），记录所有资产（确认/待确认）、提示词、制作状态、版本号；后续所有产出登记入账，全程无需手动找文件（本项目 `picks.json` + `script-outline.md` 即账本雏形，可扩展生成历史）。
 - **资产前置**：制作资产（角色/场景/道具/风格参考）占全流程 ≥50% 精力，先做扎实再谈生成——盲目追求效率质量必降。
 - **血缘/关联继承**：有强关联（血缘/同源/包含）的角色或产品：先定「母版」形象，再基于母版推演关联体（例：先定父母长相 → 再生成女儿；狼人基于男主形象）。每次继承做一次**垫图（img2img）**流程保证一致性。
