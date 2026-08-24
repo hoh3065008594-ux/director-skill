@@ -38,6 +38,16 @@ The reference photo is the character's face — keep the face, hair and the mole
    - **提示词里明确写参考图内容与不可动项**：如 `the reference photo is the character's face — keep the face, hair and mole exactly the same; only change [服装/姿势/视角]`。不要假设模型知道参考图里是什么，WD14 标签可能不全，必须文本点明"参考图 = 人物正脸，别动脸"。
    - **单出的三视图/换装图必须标记参考来源**：每张生成图配同名 `.txt` 旁注（参考图文件名、seed、提示词要点），或写进 manifest / 资产账本（`ref:` 字段）。否则后续重出/换视角时会忘记当初用的哪张参考，导致身份不一致。
 
+## FLUX 提示词写法（BFL 官方，2026-08 沉淀）
+
+FLUX.1-dev 是**自然语言模型**（T5-XXL 编码器），官方提示词原则：
+
+1. **自然语言完整句**，不要逗号关键词堆砌，**不要** SD1.5 那套 `masterpiece / best quality / 8K` 标签堆叠。
+2. **主体在前、细节在后**（词序重要）：先说"谁/什么"，再依次说服装、动作、场景、镜头、画质。例：`A professional photograph of a young East Asian woman with long golden hair and a mole at the eye corner, wearing [服装], standing in [场景], soft window light, 85mm lens, shallow depth of field, full body shot, highly detailed and photorealistic.`
+3. **dev 版不用负面词**：CFG 1.0 + FluxGuidance 3.5，负面提示词留空（rectified flow，不是 SD 的 classifier-free 负词机制）。
+4. **参考图一致性用 Flux Kontext**（FLUX 原生参考图机制，比 IPAdapter 更适合角色，无需额外 vision 模型）：提示词写 `the same [角色] as in the reference image, keeping face/hair/mole exactly the same, now [改动]`。
+5. **12GB 低显存跑 FLUX 用 GGUF 量化**：`flux1-dev-Q5_K_S.gguf`（文生图）与 `flux1-kontext-dev-Q5_K_S.gguf`（参考图），各 ~7.7GB，放 `models/unet/`；本机 ComfyUI-GGUF 的 `UnetLoaderGGUF` 已可用。**nunchaku 在 ComfyUI 0.24 跑不了**（需 0.3x），别折腾，用 GGUF 代替。
+
 ## 可复用产物（测试后已删，重建很快）
 
 - 提交脚本：`submit_8188.py`（UI→API 转换、widgets_values 覆盖 `id:idx:file`、轮询、下载）——按上述工作流重建即可。

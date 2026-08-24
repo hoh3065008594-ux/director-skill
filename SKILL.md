@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清、V7 导播台）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation, V7 storyboard console), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.14.0
+version: 1.14.2
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -232,6 +232,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 44. **Z-Image 单遍直出画质糊**（`真人-文生图` 832×1216 单遍 8 步衣服"没细节"）；出图默认走高清版管线（1024→1536 二采 denoise 0.4），要极致细节加 4x-UltraSharp。
 45. **模型家族匹配**：`majicmixRealistic_v7` 是 **SD1.5**（~2GB 判据），配 SDXL InstantID 控制网报 `y is None, did you try using a controlnet for SDXL on SD1?` → 换 `sd_xl_base_1.0`。InstantID 丢眼角痣等细部、偏半身构图，静态换装不如 WD14 配方，仅剧情镜头锁脸用。角色资产生成完整手册见 `references/character-assets.md`。
 46. **参考图必须"自我描述" + 资产标记**：换装/三视图提示词开头写 `the reference photo is the character's face — keep the face, hair and mole exactly the same; only change [服装/姿势/视角]`（别假设模型知道参考图内容）；单出的三视图/换装图配同名 `.txt` 旁注（参考来源+seed+要点），防止后续忘记用哪张参考导致身份不一致。
+47. **FLUX 提示词写法（BFL 官方）**：FLUX.1-dev 是自然语言模型——写完整句别堆关键词、**主体在前细节在后**、**不用负面词**（CFG 1.0 + FluxGuidance 3.5）、不要 SD1.5 那套 `masterpiece/best quality` 标签。参考图一致性用 Flux Kontext（原生参考图，提示词写 `the same character as in the reference image, keeping face/hair/mole exactly the same, now ...`）。12GB 低显存用 GGUF 量化（dev/kontext Q5_K_S 各 ~7.7GB 放 unet/），nunchaku 在 ComfyUI 0.24 跑不了别折腾。详见 `references/character-assets.md`「FLUX 提示词写法」。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
