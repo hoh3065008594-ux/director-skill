@@ -48,6 +48,15 @@ FLUX.1-dev 是**自然语言模型**（T5-XXL 编码器），官方提示词原�
 4. **参考图一致性用 Flux Kontext**（FLUX 原生参考图机制，比 IPAdapter 更适合角色，无需额外 vision 模型）：提示词写 `the same [角色] as in the reference image, keeping face/hair/mole exactly the same, now [改动]`。
 5. **12GB 低显存跑 FLUX 用 GGUF 量化**：`flux1-dev-Q5_K_S.gguf`（文生图）与 `flux1-kontext-dev-Q5_K_S.gguf`（参考图），各 ~7.7GB，放 `models/unet/`；本机 ComfyUI-GGUF 的 `UnetLoaderGGUF` 已可用。**nunchaku 在 ComfyUI 0.24 跑不了**（需 0.3x），别折腾，用 GGUF 代替。
 
+### 本机实测结论（2026-08-25，重要）
+
+**12GB 显卡 + 出图质量 → 放弃 FLUX，用回 Z-Image 高清二采管线**：
+
+- FLUX dev **Q5_K_S**（GGUF）：能跑，但**皮肤/布料细节软**（量化损失，RAW+纹理词+28 步也救不回）。
+- FLUX dev **fp8**（16GB）：12GB 显存跑不稳，出图"花了"，弃。
+- **Kontext 参考图**：1024 生成 + latent 二采 → 参考 latent 尺寸不匹配**崩图**；改原生 1536 生成（无二采）+ 4x 才正常，但皮肤细节仍不如 Z-Image。
+- **结论**：本机出图生产流程继续用 **Z-Image 高清二采管线**（`真人-参考图生成-高清版` + 高清正脸参考 + 1536 二采 + 可选 4x），FLUX 等有 24GB+ 显存再考虑。已下载的 GGUF 模型（dev/kontext Q5）与 fp8 保留在 D 盘，未删，暂不使用。
+
 ## 可复用产物（测试后已删，重建很快）
 
 - 提交脚本：`submit_8188.py`（UI→API 转换、widgets_values 覆盖 `id:idx:file`、轮询、下载）——按上述工作流重建即可。

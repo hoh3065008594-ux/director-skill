@@ -233,6 +233,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 45. **模型家族匹配**：`majicmixRealistic_v7` 是 **SD1.5**（~2GB 判据），配 SDXL InstantID 控制网报 `y is None, did you try using a controlnet for SDXL on SD1?` → 换 `sd_xl_base_1.0`。InstantID 丢眼角痣等细部、偏半身构图，静态换装不如 WD14 配方，仅剧情镜头锁脸用。角色资产生成完整手册见 `references/character-assets.md`。
 46. **参考图必须"自我描述" + 资产标记**：换装/三视图提示词开头写 `the reference photo is the character's face — keep the face, hair and mole exactly the same; only change [服装/姿势/视角]`（别假设模型知道参考图内容）；单出的三视图/换装图配同名 `.txt` 旁注（参考来源+seed+要点），防止后续忘记用哪张参考导致身份不一致。
 47. **FLUX 提示词写法（BFL 官方）**：FLUX.1-dev 是自然语言模型——写完整句别堆关键词、**主体在前细节在后**、**不用负面词**（CFG 1.0 + FluxGuidance 3.5）、不要 SD1.5 那套 `masterpiece/best quality` 标签。参考图一致性用 Flux Kontext（原生参考图，提示词写 `the same character as in the reference image, keeping face/hair/mole exactly the same, now ...`）。12GB 低显存用 GGUF 量化（dev/kontext Q5_K_S 各 ~7.7GB 放 unet/），nunchaku 在 ComfyUI 0.24 跑不了别折腾。详见 `references/character-assets.md`「FLUX 提示词写法」。
+48. **本机出图用 Z-Image 高清管线，不要上 FLUX（2026-08-25 实测）**：12GB 显存上 FLUX Q5 GGUF 皮肤/布料细节软（量化损失）、fp8 跑不稳出图"花了"、Kontext 二采链参考尺寸不匹配崩图（只能原生 1536 无二采）。**出图生产继续用 Z-Image 高清二采管线**（`真人-参考图生成-高清版` + 高清正脸参考 + 1536 二采 + 可选 4x）；FLUX 等 24GB+ 显存再考虑。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
