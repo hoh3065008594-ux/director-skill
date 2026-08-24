@@ -1,11 +1,11 @@
-# H3 分段参考生视频工作流（Impact V6）— 资源包精简说明
+# H3 分段参考生视频工作流（Impact V6 / V7 导播台）— 资源包精简说明
 
 > 工作流版权：B站UP **南极来の企鹅** 与 抖音 **Theodore**（抖音号 q1503623946）。仅允许非商业行为与传播，分享请注明出处，禁止倒卖。技术交流 QQ 群：1104337287。
-> 本目录是工作流 JSON 的版本备份 + 依赖清单；**详细使用见 SKILL.md 的「2b. 视频生成（MiniMax H3 分段 V6 · 主流程）」** 及 `references/h3-segmented/` 手册。
+> 本目录是工作流 JSON 的版本备份 + 依赖清单；**详细使用见 SKILL.md 的「2b. 视频生成」** 及 `references/h3-segmented/` 手册（V6：`segmented-workflow-v6.md`；V7 导播台：`theodore-director-v7.md`）。
 
 ## 一、这是什么
 
-解决 H3 官方模板**单次只能生成 5–15 秒**的限制：把长视频拆成多段逐段生成，用 **Impact Pack 队列控制**避免内存堆积（实测能跑 50 段 × 15s），**V6 段间 Latent 传递**（22 帧视频 + 24 帧音频上下文，约 1s 代价）保证连续性与一致性；支持参考图/视频/音频生视频与**双采**高清。
+解决 H3 官方模板**单次只能生成 5–15 秒**的限制：把长视频拆成多段逐段生成，用 **Impact Pack 队列控制**避免内存堆积（实测能跑 50 段 × 15s），**段间 Latent 传递**（22 帧视频 + 24 帧音频上下文，约 1s 代价）保证连续性与一致性；支持参考图/视频/音频生视频与**双采**高清。**V7** 在 V6 基础上增加 UP主自制自定义节点**导播台（ComfyUI_Theodore_Director）**：素材别名管理、每镜独立时长/开关、续跑与后处理合并。
 
 ## 二、工作流版本清单（`workflows/`）
 
@@ -17,9 +17,11 @@
 | v3 | `3_全加速节点版/*.json` | 融入 Turbo LoRA / Sage Attention / LowVRAM |
 | v4 | `4_Impact_v4/*.json`（3 个） | 段数/每段时长完全自由；含整段提示词输入版 |
 | v5 | `5_Impact_v5/*.json`（3 个） | 新增双采（RTX 1.5× 二采）；尾帧参考衔接 |
-| **v6（当前）** | `6_V6/Impact_V6_双采_整合提示词版本.json` | **推荐**：二采 + 整段脚本一次填入（`===` 分段） |
+| v6 | `6_V6/Impact_V6_双采_整合提示词版本.json` | V6 兼容主流程：二采 + 整段脚本一次填入（`===` 分段） |
 | v6 | `6_V6/Impact_V6_单采_整合提示词版本.json` | 单采省时 + 整段脚本 |
 | v6 | `6_V6/Impact_V6_双采.json` / `Impact_V6_单次采样.json` | 二采/单采 + 逐段独立提示词 |
+| **v7（当前推荐）** | `7_V7/Impact_V6_单采_Theodore导播台.json` | **导播台**：素材别名 + 每镜提示词/时长 + 续跑 + 后处理合并；仓库原名 `Impact_V6_Single_Theodore_Director.json` |
+| v7 | `7_V7/Impact_V6_双采_Theodore导播台.json` | 导播台双采高清版；仓库原名 `Impact_V6_Dual_Theodore_Director.json` |
 
 > ⚠️ 已把所有工作流的 UNETLoader 模型名统一为 **`minimax_h3_ref2va_pruned_int8_convrot.safetensors`**（int8 变体，本机实测跑通）；如需 fp8_scaled 请自行改回。
 
@@ -27,6 +29,7 @@
 
 | 节点包 | 用途 | 本机状态 |
 |---|---|---|
+| **ComfyUI-Theodore-Director** | **V7 导播台**（素材别名/plan_json/续跑/后处理合并，需 ComfyUI ≥0.31.x） | ✅ 已装（v0.1.0，git 克隆自官方仓库） |
 | **ComfyUI-Impact-Pack** | 队列控制（QueueTrigger/Branch/ExecutionOrderController/SetWidgetValue） | ✅ 已装（补 piexif 等依赖） |
 | **comfyui-h3-motion-context** | V6 Latent 传递核心（Load/Context/Trim/Save Latent） | ✅ 已装（作者 NikoDemon80） |
 | **comfyui-minimax-h3-turbo** | TurboSampler / TurboLoRA | ✅ 已有 |
@@ -51,8 +54,15 @@
 | `minimax_h3_turbo_v4_step600_ema.safetensors` | loras/ | ✅ 已有（一采 Turbo，需 Turbo 采样器） |
 | `minimax_h3_fl2v_lightx2v_turbo_4step_v0.1_comfy_resized_avg_rank_21_bf16.safetensors` | loras/ | ✅ 已补（二采 LoRA） |
 
-## 五、快速使用（详见 SKILL.md 2b 十步标准操作）
+## 五、快速使用（详见 SKILL.md 2b）
 
+**V7 导播台（推荐，多段长视频）**：
+1. 启动 H3 实例（`D:\ComfyUI-H3`，端口 8190）→ 浏览器开 http://127.0.0.1:8190
+2. 加载 `workflows/7_V7/Impact_V6_单采_Theodore导播台.json`（或双采版）
+3. 双击 `① Theodore 项目与可视化导播台` → "打开 Theodore 导播台"：填项目名/Run ID → 素材库传图/视频/音频并设别名 → 分镜填每段时长 + 提示词（`{{ref:别名}}`）→ 保存到工作流
+4. Queue → 自动逐段生成（产物 `output/TheodoreDirector/<项目名>_<RunID>/`）→ 导播台"后处理"页逐镜选结果 → 合并所选视频成片
+
+**V6（兼容）**：
 1. 启动 H3 实例（`D:\ComfyUI-H3`，端口 8190）→ 浏览器开 http://127.0.0.1:8190
 2. 加载 `workflows/6_V6/Impact_V6_双采_整合提示词版本.json`
 3. ImagePass 传参考图 → 桥接 `ref_image_N`（demo 映射：1=主角 / 2=怪兽 / 3,4=场景）
@@ -68,13 +78,16 @@
 - 产物副本：`D:\dsh web 工作区\h3-segmented-workflow\test-output\2seg_segment1_5.17s.mp4` / `2seg_segment2_4.25s.mp4`
 - 坑：latent 路径约定（Save prefix 以 `/clip` 结尾、Load 传目录 `/latent_context` + `clip_index=段号`）；`context_length` 枚举必须传字符串（`"22"`）
 
-## 七、原始资源链接（作者持续更新，当前 V6）
+## 七、原始资源链接（作者持续更新）
 
+- **V7 导播台官方 GitHub 仓库（开源，内测阶段）**：https://github.com/northern-penguin/ComfyUI_Theodore_Director
+- **V7 夸克网盘（节点压缩包，含 demo 工作流；demo 提示词抄自 v5，仅供参考）**：https://pan.quark.cn/s/27b5afeffc1d?pwd=Evwx（提取码 Evwx）
+- **V7 百度网盘（同上）**：https://pan.baidu.com/s/1jNGMeT6KkPBUsodA2gOxTA?pwd=m752（提取码 m752）
 - RunningHub 体验页：https://www.runninghub.cn/post/2090022476851007490/?inviteCode=cfu6msiz
-- 夸克网盘（工作流+skill）：https://pan.quark.cn/s/f15b100b7c31?pwd=jcvL（提取码 jcvL）
-- 百度网盘（工作流+skill）：https://pan.baidu.com/s/16p88moBn8AW1C9OQvxhDTA（提取码 g3cc）
-- 夸克网盘（节点包）：https://pan.quark.cn/s/061c1e9cc2b8?pwd=bx8c（提取码 bx8c）
-- 百度网盘（节点包）：https://pan.baidu.com/s/1uL5eWbyr7zv7PNF4h_t7uA?pwd=5pwe（提取码 5pwe）
+- 夸克网盘（V6 工作流+skill）：https://pan.quark.cn/s/f15b100b7c31?pwd=jcvL（提取码 jcvL）
+- 百度网盘（V6 工作流+skill）：https://pan.baidu.com/s/16p88moBn8AW1C9OQvxhDTA（提取码 g3cc）
+- 夸克网盘（V6 节点包）：https://pan.quark.cn/s/061c1e9cc2b8?pwd=bx8c（提取码 bx8c）
+- 百度网盘（V6 节点包）：https://pan.baidu.com/s/1uL5eWbyr7zv7PNF4h_t7uA?pwd=5pwe（提取码 5pwe）
 
 ## 版权
 

@@ -1,8 +1,8 @@
 ---
 name: director
-description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
+description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清、V7 导播台）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation, V7 storyboard console), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.12.0
+version: 1.13.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -20,7 +20,7 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 | 有人参与 | 《真人-文生图》 | 单段 1216×832，无参考图 |
 | 有人参与 + 用户给了参考图 | 《真人-参考图生成-高清版》 | 参考图→WD14 反推→拼接"超写实人像摄影,细腻皮肤质感,自然光,高清细节"→初绘 1024×1024→1.5× 重绘→1536 |
 | 风景 / 背景 | 《风景-参考图生成-高清版》 | 参考图→WD14 反推→拼接"超写实风景摄影,自然光影,高清细节,专业风光摄影"→初绘 1344×896→1.5× 重绘→2016×1344 |
-| 视频（镜头动画化 / 长片分段） | MiniMax H3 分段 V6（本地） | 单段与多段统一走 V6 工作流，整段脚本一次填入 → 自动逐段生成 + Latent 衔接 + 双采，见 2b 章节 |
+| 视频（镜头动画化 / 长片分段） | MiniMax H3 分段 **V7 导播台**（本地） | 多段长视频走 V7（导播台节点，素材别名 + 每镜提示词/时长管理）；单段/兼容走 V6。均自动逐段生成 + Latent 衔接 + 双采，见 2b 章节 |
 
 参考图一律放项目内 `assets/input/`（ComfyUI 以 `--input-directory` 指向，不落 C 盘）；无参考图时先用《真人-文生图》打底再喂参考图管线。
 
@@ -131,9 +131,11 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 - **字幕不要烧进图**（SD 渲染文字差），由成片动画层叠加。
 - **每张生成图必须附提示词**（用户要求）：生成后运行 `node .comfy/attach.js`——写 PNG tEXt `noir-prompt` 块 + 同名 `.txt` 旁注；重拍脚本已自动附加。
 
-### 2b. 视频生成（MiniMax H3 分段 V6 · 主流程）
-- **路由**：单段（≤15s 单镜头）与长片（>15s 多镜）**统一走 V6 分段工作流**（`分段数量` 填 1 即单段）；**原手搓 r2v 管线《minimax_h3_r2v_prompt_expand》已弃用**——V6 是它的超集（同 Ref2VA 引擎 + 队列控制 + Latent 衔接 + 双采）。
-- **工作流**（已存 H3 实例 `D:\ComfyUI-H3\user\default\workflows\`）：推荐 `Impact_V6_双采_整合提示词版本.json`；另有 `Impact_V6_单采_整合提示词版本.json`（省时）、`Impact_V6_双采.json` / `Impact_V6_单次采样.json`（逐段独立提示词）及 v1–v5 存档。
+### 2b. 视频生成（MiniMax H3 分段 · V7 导播台主流程 / V6 兼容）
+- **路由（2026-08-24 起）**：多段长视频（>15s）**优先走 V7 导播台工作流**（`Impact_V6_单采/双采_Theodore导播台.json`，需装 `ComfyUI_Theodore_Director` 节点）——素材用别名管理、每镜独立时长/开关、自带续跑与后处理合并，见 `references/h3-segmented/theodore-director-v7.md`；**V6 仍为兼容主流程**（单段 ≤15s 或沿用整段脚本习惯时继续用 `Impact_V6_双采_整合提示词版本`）。原手搓 r2v 管线《minimax_h3_r2v_prompt_expand》已弃用——V6/V7 是它的超集（同 Ref2VA 引擎 + 队列控制 + Latent 衔接 + 双采）。
+- **V7 与 V6 差异一句话**：提示词/参数从"每段节点"收进 `TheodoreDirector_Project` 的 plan_json（导播台可视化编辑或改 JSON）；素材库别名 `{{ref:alias}}` 编译成 `<Picture/Video/Audio N>`；每镜独立时长吸附 17n+5；resume 续跑 + CommitResult 完成后自动接力下一段；产物在 `output/TheodoreDirector/<项目名>_<RunID>/`。
+- **V7 模型修补**：官方工作流默认引用 `minimax_h3_ref2va_pruned_fp8_scaled.safetensors`，本机已统一改为已装的 `minimax_h3_ref2va_pruned_int8_convrot.safetensors`（V6 同款，实测跑通）；节点 git 克隆于 `D:\ComfyUI-H3\custom_nodes\ComfyUI_Theodore_Director`（v0.1.0）。
+- **工作流**（已存 H3 实例 `D:\ComfyUI-H3\user\default\workflows\`）：推荐 `Impact_V6_单采_Theodore导播台.json`（省时）或 `Impact_V6_双采_Theodore导播台.json`（高清）；V6 有 `Impact_V6_双采_整合提示词版本.json`、`Impact_V6_单采_整合提示词版本.json`（省时）、`Impact_V6_双采.json` / `Impact_V6_单次采样.json`（逐段独立提示词）及 v1–v5 存档。
 - 原理：H3 是**视频+音频联合生成的打包 DiT**（NestedTensor 视频 [B,24,T,H/16,W/16] + 音频 [B,32,2,T]）；帧数吸到 **17k+5 网格**（124 帧≈5s@24fps，5–15s 训练范围）；画布 768 短边 + 768×1344 面积上限。**V6 段间 Latent 传递**（22 帧视频 + 24 帧音频上下文，约 1s 代价）替代 v1–v5 的尾帧参考，保证连续性与一致性；**Impact Pack 队列控制**避免中间产物内存堆积（能跑第 2 段就能跑 50 段）。
 - **整段脚本格式**（`一次性填入全部分段脚本`）：`## 第 01 段` + `& 5 &` + 六段式提示词，段间**单独一行 `===`**；`分段数量` 与拆段数一致；每段 5–15s 自动 clamp。**时长规划**：N 段实际总时长 ≈ `N×5 − 0.92×(N−1)` 秒（每段 22 帧上下文代价）——拍 30s 广告按此反推段数与每段时长。
 - **V6 提示词规则**：**全部指代用户固定参考图**，不写"参考图 1 是上一段尾帧"（v5 及以前才需要）；每段结尾最后半秒动作静止形成"锚点画面"；段间保持人物/服装/道具/空间/光线/镜头高度/动作阶段/物体状态连续；音乐中间段不终止、末段收束；对白尽量不跨段。
@@ -227,9 +229,9 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
-- 用户工作流：`C:\Users\Administrator\ComfyUI\user\default\workflows\`（真人-文生图 / 真人-参考图生成-高清版 / 风景-参考图生成-高清版 / Z-Image-Turbo-GGUF 等）；H3 工作流：`D:\ComfyUI-H3\user\default\workflows\`（**Impact_V6_双采_整合提示词版本** 为主流程 + V6 其余 3 版 + v1–v5 存档 + minimax_h3_t2v_turbo / minimax_h3_r2v_prompt_expand 旧版）
+- 用户工作流：`C:\Users\Administrator\ComfyUI\user\default\workflows\`（真人-文生图 / 真人-参考图生成-高清版 / 风景-参考图生成-高清版 / Z-Image-Turbo-GGUF 等）；H3 工作流：`D:\ComfyUI-H3\user\default\workflows\`（**V7 导播台 `Impact_V6_单采/双采_Theodore导播台.json`** + **Impact_V6_双采_整合提示词版本**（V6 主流程）+ V6 其余 3 版 + v1–v5 存档 + minimax_h3_t2v_turbo / minimax_h3_r2v_prompt_expand 旧版）
 - 模型库：`D:\download\ComfyUI_models`（diffusion_models: z_image_turbo_bf16、flux1-dev-fp8、**minimax_h3_fl2va/ref2va**；text_encoders: qwen_3_4b_fp8 / **qwen3vl_32b_minimax_h3** / clip_l / t5xxl_fp8；vae: ae / minimax_h3_video_vae_fp16 / minimax_h3_audio_vae_fp32；loras: minimax_h3_turbo_v4 / **minimax_h3_fl2v_lightx2v_turbo_4step**（分段二采，2026-08-23 已补）/ minimax_h3_fl2v_turbo_8step；upscale: 4x-UltraSharp）
-- H3 分段工作流节点（2026-08-23 已装 `D:\ComfyUI-H3\custom_nodes\`）：Impact-Pack、ComfyUI-H3-Motion-Context、ComfyUI-Easy-Use、ComfyUI-KJNodes、comfyui-mixlab-nodes（TextSplitByDelimiter 已独立注册）、Nvidia_RTX_Nodes_ComfyUI（nvidia-vfx 已装）；ComfyUI-Manager 已切 private 模式避免启动联网超时
+- H3 分段工作流节点（2026-08-24 已装 `D:\ComfyUI-H3\custom_nodes\`）：Impact-Pack、ComfyUI-H3-Motion-Context、ComfyUI-Easy-Use、ComfyUI-KJNodes、comfyui-mixlab-nodes（TextSplitByDelimiter 已独立注册）、Nvidia_RTX_Nodes_ComfyUI（nvidia-vfx 已装）、**ComfyUI_Theodore_Director（V7 导播台，v0.1.0，需 ComfyUI ≥0.31.x）**；ComfyUI-Manager 已切 private 模式避免启动联网超时
 - WD14 反推：`C:\Users\Administrator\ComfyUI\custom_nodes\ComfyUI-WD14-Tagger\models\wd-v1-4-moat-tagger-v2.onnx`；LLM 扩写 GGUF：`D:\download\LM-Studio\lmstudio-community\Qwen3.5-9B-GGUF\Qwen3.5-9B-Q4_K_M.gguf`（comfyui_LLM_party）
 - GPU：RTX 4070 SUPER 12GB（cuda 可用）；RAM 32GB；Node：`D:\node.exe`
 - ffmpeg/ffprobe：`D:\桌面\剪辑\高帧\ffmpeg-master-latest-win64-gpl-shared\bin\`；Python（含 PIL）可用
@@ -260,8 +262,9 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 
 ## H3 分段参考（长视频扩展，存于 `references/h3-segmented/`）
 - `segmented-workflow-v6.md` — **Impact V6 分段工作流完整手册**：何时用分段、v1–v6 版本对比、Latent 传递原理、依赖节点/模型、整段脚本格式、运行流程、双采参数、加速节点、故障排查
-- `demo_prompts_12segments.md` — **12 段 × 5s 完整 demo**《机器人与沙漠温室中的希望之种》(60s)：六段式提示词逐段全量范例（v2 尾帧编号格式；V6 使用时应去掉尾帧指代、全部指代固定参考图）
-- 资源包：`D:\dsh web 工作区\h3-segmented-workflow\`（workflows v1–v6 JSON、7 节点 .rar、demo、官方提示词指南）；RunningHub 体验页 https://www.runninghub.cn/post/2090022476851007490/
+- `theodore-director-v7.md` — **V7 导播台（ComfyUI_Theodore_Director）使用手册**：节点安装/模型修补、plan_json 编辑、别名规范与 H3 限制、节点速查、续跑与后处理合并
+- `demo_prompts_12segments.md` — **12 段 × 5s 完整 demo**《机器人与沙漠温室中的希望之种》(60s)：六段式提示词逐段全量范例（v2 尾帧编号格式；V6/V7 使用时应去掉尾帧指代、全部指代固定参考图）
+- 资源包：`D:\dsh web 工作区\h3-segmented-workflow\`（workflows v1–v7 JSON、7 节点 .rar、demo、官方提示词指南）；V7 官方仓库 https://github.com/northern-penguin/ComfyUI_Theodore_Director ；RunningHub 体验页 https://www.runninghub.cn/post/2090022476851007490/
 
 ## Cinema DNA 电影感参考（融合自 cinema-dna-21x9x3 v1.2.2，存于 `references/cinema-dna/`）
 - `SKILL.md` — 原技能全文（1218 行）：关系压力构图、视线流量、受控随机、色彩命题、三联剪辑节奏、反 CG/AI/模板化检查、片名与主题海报阶段完整规则（已提炼进 1e）
