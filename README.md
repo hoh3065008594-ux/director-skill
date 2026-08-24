@@ -30,6 +30,7 @@ director/
 | **1.11.0** | **1b 人物类硬性门槛**：出场景前必须先产出并确认角色三件套（整体母版/三视图/脸特写），以母版/三视图锚定人物一致性 |
 | **1.12.0** | **30s 广告全流程实测沉淀**：避坑 36–41（双实例爆 RAM/HostBuffer-1455、H3 冷热加载 60min vs 42s、libass 中文路径、审片门禁、重跑产物递增、角色三件套）；§2b 新增 7 段 30.7s 实测 + 字幕时间轴算法 + 可复用模板路径 |
 | **1.13.0** | **引入 V7 导播台（ComfyUI_Theodore_Director 开源节点）**：工作流入 `h3-segmented-workflow/workflows/7_V7/`（单采/双采，模型已补丁为 int8_convrot）；§2b 改为 V7 主流程 / V6 兼容路由；新增 `references/h3-segmented/theodore-director-v7.md` 手册（节点安装、plan_json 编辑、别名规范、H3 限制、续跑、后处理合并） |
+| **1.14.0** | **角色资产生成实测沉淀**：新增 `references/character-assets.md`（身份锚点管线：高清正脸→素体分视角→换装；WD14 参考图配方、提示词身份块、三视图拆独立图、Z-Image 高清二采、InstantID 实测与 SD1.5/SDXL 家族坑）；§1b 补充实操；避坑 42–45 |
 
 ## 更新流程（重要）
 

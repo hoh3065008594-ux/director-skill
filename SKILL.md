@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清、V7 导播台）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation, V7 storyboard console), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.13.0
+version: 1.14.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -51,6 +51,7 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 
 ### 1b. 资产账本与人物/产品一致性（3+2 工作流 3.0 精华）
 - **人物类项目硬性门槛（2026-08-24 教训）**：出任何场景前，必须先产出并确认**角色三件套**——① **角色整体图**（母版：全身/七分身，锁定服装、发型、神态与光线基调）② **三视图**（正/侧/背，基于母版垫图生成，供各镜统一视角）③ **脸特写**（正脸近景，供面部一致性）。三件套进资产账本，后续所有含人物镜头**必须以母版/三视图为参考图锚定**，禁止直接用场景草稿当人物参考（否则跨镜人物必然漂移）。用户明确要求"生成人物/角色"时同理先出三件套再谈场景。
+- **角色资产生成实操（2026-08-25 实测，见 `references/character-assets.md`）**：本机做角色一致性最稳配方 = **高清正脸（身份锚点）→ 素体分视角（体型锚点）→ 换装**，用《真人-参考图生成-高清版》工作流，**参考图必须用高清正脸/脸特写**（该工作流是 WD14 标签式参考：全身图反推出的全是衣服场景标签，脸没被描述必然漂移），提示词必须写满身份词（`young East Asian woman` + 眼角痣 + 发型，否则三视图变欧洲脸）；三视图拆成每视角独立图，不要合成一张；Z-Image 单遍直出画质糊，必须走高清二采管线（1024→1536）。InstantID（SDXL）路线已装通但静态换装不如该配方，适合剧情镜头锁脸场景（模型在 D 盘，C 盘 junction，见手册）。
 - **先建账本**：项目一开始就建本地账本（`assets/manifest.json` 或目录树），记录所有资产（确认/待确认）、提示词、制作状态、版本号；后续所有产出登记入账，全程无需手动找文件（本项目 `picks.json` + `script-outline.md` 即账本雏形，可扩展生成历史）。
 - **资产前置**：制作资产（角色/场景/道具/风格参考）占全流程 ≥50% 精力，先做扎实再谈生成——盲目追求效率质量必降。
 - **血缘/关联继承**：有强关联（血缘/同源/包含）的角色或产品：先定「母版」形象，再基于母版推演关联体（例：先定父母长相 → 再生成女儿；狼人基于男主形象）。每次继承做一次**垫图（img2img）**流程保证一致性。
@@ -226,6 +227,10 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 39. **审片门禁（2026-08-24 教训）**：关键帧/片段生成后**必须先过审片页定稿（picks.json）再进入下一阶段**；跳过用户确认直接开跑 → 返工代价高（本会话 SC.06 脸部→产品特写改了两轮、重跑 2 段视频 + 重拼母版）。
 40. **重跑同名产物递增**：同前缀重跑 SaveVideo 会生成 `_00002_`（不覆盖）；脚本取文件必须按数字后缀取**最新**，或先清理旧产物（`segment_6_00001_` 与 `00002_` 同时存在时 `readdir` 排序取错会用到旧版）。
 41. **人物类项目先出角色三件套**（整体母版/三视图/脸特写）再谈场景——见 §1b 硬性门槛；跳过它必然跨镜人物漂移，返工成本远高于先做资产。
+42. **参考图工作流（真人-参考图生成-高清版）是 WD14 标签式参考**：参考图只被反推成文字标签，不是图像条件。参考图必须用**脸特写/高清正脸**（反推出面部标签）；用全身图当参考反推出的全是衣服场景标签 → 脸漂移。
+43. **换装/三视图提示词必须写满身份词**（`young East Asian woman`、`small beauty mole at the outer corner of her right eye`、发型）；漏写 `East Asian` 三视图直接变欧洲脸（2026-08-25 实测）。三视图拆成每视角独立图，合成一张脸太小撑不住身份。
+44. **Z-Image 单遍直出画质糊**（`真人-文生图` 832×1216 单遍 8 步衣服"没细节"）；出图默认走高清版管线（1024→1536 二采 denoise 0.4），要极致细节加 4x-UltraSharp。
+45. **模型家族匹配**：`majicmixRealistic_v7` 是 **SD1.5**（~2GB 判据），配 SDXL InstantID 控制网报 `y is None, did you try using a controlnet for SDXL on SD1?` → 换 `sd_xl_base_1.0`。InstantID 丢眼角痣等细部、偏半身构图，静态换装不如 WD14 配方，仅剧情镜头锁脸用。角色资产生成完整手册见 `references/character-assets.md`。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
@@ -262,6 +267,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 
 ## H3 分段参考（长视频扩展，存于 `references/h3-segmented/`）
 - `segmented-workflow-v6.md` — **Impact V6 分段工作流完整手册**：何时用分段、v1–v6 版本对比、Latent 传递原理、依赖节点/模型、整段脚本格式、运行流程、双采参数、加速节点、故障排查
+- `character-assets.md` — **角色资产生成手册（2026-08-25）**：身份锚点管线（高清正脸→素体分视角→换装）、WD14 参考图配方、提示词身份块、InstantID 实测与模型家族坑、Z-Image 高清二采必要性
 - `theodore-director-v7.md` — **V7 导播台（ComfyUI_Theodore_Director）使用手册**：节点安装/模型修补、plan_json 编辑、别名规范与 H3 限制、节点速查、续跑与后处理合并
 - `demo_prompts_12segments.md` — **12 段 × 5s 完整 demo**《机器人与沙漠温室中的希望之种》(60s)：六段式提示词逐段全量范例（v2 尾帧编号格式；V6/V7 使用时应去掉尾帧指代、全部指代固定参考图）
 - 资源包：`D:\dsh web 工作区\h3-segmented-workflow\`（workflows v1–v7 JSON、7 节点 .rar、demo、官方提示词指南）；V7 官方仓库 https://github.com/northern-penguin/ComfyUI_Theodore_Director ；RunningHub 体验页 https://www.runninghub.cn/post/2090022476851007490/
