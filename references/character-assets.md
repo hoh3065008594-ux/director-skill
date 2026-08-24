@@ -14,7 +14,15 @@
 | ② 素体分视角 | 体型锚点 | `真人-参考图生成-高清版.json`，参考=① | **每视角独立一张全身图**（正/侧/背），不要合成一张（脸太小撑不住身份） |
 | ③ 换装 | 服装变体 | 同上，参考=① | text_b 写身份 + 服装描述；每套一个别名进导播台素材库 |
 
-参考图统一放 `ComfyUI/input/`（如 `char_face_hd.png`），text_b 用 UTF-8 无 BOM。
+参考图统一放 `ComfyUI/input/`（如 `char_face_hd.png`），text_b 用 UTF-8 无 BOM。**每张产出配同名 `.txt` 旁注**：参考图来源 + seed + 提示词要点（防止后续忘记参考是谁）。
+
+### 参考图描述块（text_b 开头固定加这段）
+
+```text
+The reference photo is the character's face — keep the face, hair and the mole at the right eye corner exactly the same; only change the [outfit / pose / viewing angle] described below.
+```
+
+即使参考图就是脸，也要明确写"别动脸"，否则模型可能自行改脸型/五官。
 
 ## 关键教训（避坑）
 
@@ -26,6 +34,9 @@
 6. **InstantID 路线实测**（已装通，模型在 D 盘）：节点 `ComfyUI_InstantID` + insightface 1.0.1（py3-none-any wheel，Python 3.12 可装）+ onnxruntime-gpu；模型 `ip-adapter.bin`（models/instantid）、`controlnet/instantid/diffusion_pytorch_model.safetensors`、antelopev2（models/insightface/models/antelopev2）。**坑**：`folder_paths.models_dir` 指向 C 盘 → 用目录联接 `mklink /J` 把 `C:\...\models\instantid`、`models\insightface` 指到 D 盘（零数据占 C）；参考官方 CFG 4-5、weight 0.8、1016×1016 防水印。效果：脸能锁，但**丢眼角痣等细部**（身份嵌入不保）、构图偏半身、写实质感一般 → 静态换装不如 WD14 配方；适合剧情镜头需要任意姿势锁脸的场景。
 7. **审片用 serve_review.js**（`references/review-panel/`）：assets/generated 按 `scene-NN_变体号_.png` 命名，4s 轮询，多版本同场景对比；改 SCENES/SCENE_META 后重启。
 8. **官方提示词规范**：Z-Image 官方 6 段式（Subject / Scene / Composition / Lighting / Style / Constraints），Qwen3 编码器偏好**长句自然语言**（非逗号堆词）；majicmix 官方负词表（painting/extra fingers/mutated hands/…）可复用于 SDXL。
+9. **参考图必须"自我描述" + 资产标记（2026-08-25 追加）**：
+   - **提示词里明确写参考图内容与不可动项**：如 `the reference photo is the character's face — keep the face, hair and mole exactly the same; only change [服装/姿势/视角]`。不要假设模型知道参考图里是什么，WD14 标签可能不全，必须文本点明"参考图 = 人物正脸，别动脸"。
+   - **单出的三视图/换装图必须标记参考来源**：每张生成图配同名 `.txt` 旁注（参考图文件名、seed、提示词要点），或写进 manifest / 资产账本（`ref:` 字段）。否则后续重出/换视角时会忘记当初用的哪张参考，导致身份不一致。
 
 ## 可复用产物（测试后已删，重建很快）
 

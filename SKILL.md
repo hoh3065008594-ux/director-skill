@@ -231,6 +231,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 43. **换装/三视图提示词必须写满身份词**（`young East Asian woman`、`small beauty mole at the outer corner of her right eye`、发型）；漏写 `East Asian` 三视图直接变欧洲脸（2026-08-25 实测）。三视图拆成每视角独立图，合成一张脸太小撑不住身份。
 44. **Z-Image 单遍直出画质糊**（`真人-文生图` 832×1216 单遍 8 步衣服"没细节"）；出图默认走高清版管线（1024→1536 二采 denoise 0.4），要极致细节加 4x-UltraSharp。
 45. **模型家族匹配**：`majicmixRealistic_v7` 是 **SD1.5**（~2GB 判据），配 SDXL InstantID 控制网报 `y is None, did you try using a controlnet for SDXL on SD1?` → 换 `sd_xl_base_1.0`。InstantID 丢眼角痣等细部、偏半身构图，静态换装不如 WD14 配方，仅剧情镜头锁脸用。角色资产生成完整手册见 `references/character-assets.md`。
+46. **参考图必须"自我描述" + 资产标记**：换装/三视图提示词开头写 `the reference photo is the character's face — keep the face, hair and mole exactly the same; only change [服装/姿势/视角]`（别假设模型知道参考图内容）；单出的三视图/换装图配同名 `.txt` 旁注（参考来源+seed+要点），防止后续忘记用哪张参考导致身份不一致。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
