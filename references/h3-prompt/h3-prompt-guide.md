@@ -67,7 +67,33 @@ overall_soundscape:       # 环境音/物理声/非语言人声
 non_diegetic_music:       # 仅观众可听的配乐
 ```
 
+**任务类型（summary 第一行括号内）按实际素材声明，官方枚举**：
+- `[reference generation]` — 纯画面参考（无音频参考）
+- `[reference generation + audio reference]` — 画面 + 音频/对白参考（**本机所有带对白的段必须用这个**，只写 `[reference generation]` 属格式不完整）
+
 **四类标签**：`<Subject N>` 可复用内容（人/物/场景/服装/风格/动作）｜`<Picture N>` 具体帧锚｜`<Video N>` 剪辑源/续写/结构参考｜`<Audio N>` 音频信号/音色参考。标签编号 = 实际连线顺序，赋值后全文含义不变。
+
+**官方 Ref2VA 完整段落模板（本机实测可用，2026-08-25 起全量采用）**：
+
+```
+subject_definitions:
+<Picture 1> is the fixed reference image: [一句描述参考图内容].
+
+summary:
+[reference generation + audio reference] One continuous shot starting from the reference composition: [一句话概括本段动作弧线].
+
+retention_analysis:
+<Picture 1> [构图/主体/光线/风格]：fully_preserved; [关键元素2]：fully_preserved; no readable text anywhere: fully_preserved.
+
+detailed_description:
+[Shot 1] [风格句]. [主体与场景完整自然语言描述，动作+运镜按官方运镜三维度自然融入]. An [身份描述] voice speaks clearly in an off-screen voiceover: '<d>[Chinese] 台词</d>' while his lips remain completely closed. In the final half second [收尾动作] motion fully frozen, forming a clean anchor frame. no text, no letters, no signs, no subtitles.
+
+overall_soundscape:
+[1-4 句环境音，含台词外的物理声].
+
+non_diegetic_music:
+[配器/速度/情绪弧线，中间段不终止、末段收束；无配乐写 N/A].
+```
 
 ## 4. 运镜三维度（唯一官方写法）
 
@@ -90,7 +116,7 @@ non_diegetic_music:       # 仅观众可听的配乐
 | 说话人 ID | `(S1)` `(S2)` 跨镜稳定；多人齐说 `(S1,S2)`；不发声角色不给 ID |
 | 对白 | `<d>[语言] 原文内容</d>`（逐字保留原文语言，不翻译） |
 | 首次出现 | 给身份信息：类型/年龄/性别/音高/音色/语速/口音 |
-| 画外音 | `says in an off-screen voiceover: <d>...</d> while his/her lips remain completely closed.`（双保险防火星语） |
+| 画外音 | `An [身份] voice speaks clearly in an off-screen voiceover: '<d>...</d>' while his/her lips remain completely closed.`（**官方逐字语法，双保险防火星语**；本机实测：旁白类对白必须用这个句式，否则模型可能让画面人物张嘴对白导致火星语） |
 | 跨切对白 | 连接点 `<scenetrans>` + `continues seamlessly across the cut` |
 | 句尾截断 | `<cutoff>` |
 | 画面可见文字 | 英文双引号包裹逐字保留：`A sign reading "营业中"` |
@@ -149,3 +175,4 @@ non_diegetic_music:       # 仅观众可听的配乐
 - 提示词可以超长多行（含六段结构），脚本原样传入
 - 环境声广告（无对白）：提示词写 ambient hum/drips 等即可；连续剧：写 `<Subject N> (S1) says, <d>[Chinese] …</d>`
 - 英文为主体描述，对白保留中文原文字语言
+- **官方规范整段示例**（2026-08-25 实测通过，7 段竖屏宣传片全量 Ref2VA 六段式）：`official-spec-example-h3-jobs.json`（含 summary `[reference generation + audio reference]`、off-screen voiceover 画外音句式、retention_analysis 逐项 fully_preserved、结尾半秒静止锚点）——新项目照此模板改主体/场景/台词即可

@@ -2,12 +2,13 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清、V7 导播台）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation, V7 storyboard console), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.14.2
+version: 1.15.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
 
 > **语言**: 默认中文沟通；分镜、字幕、文案用中文，AI 出图/出视频提示词用英文。
+> **提示词铁律（2026-08-25 用户明确要求）**：每个模型的提示词必须按其**官方规范**书写——Z-Image 见 `references/z-image-prompt-guide.md`，MiniMax H3 见 `references/h3-prompt/h3-prompt-guide.md`，见 §1d-2。
 
 # AI 导演 Skill（DSH / Windows 版）
 
@@ -80,13 +81,33 @@ allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_se
 - 自定义风格（⑨）八步推导法：识别来源类别（艺术家/导演/工作室/摄影师/游戏/时代美学）→ 提取风格核心 → 提取视觉基调 → 提取色彩影调 → 合并三层输出（40-80字）→ 合理性自检 → 输出给用户确认 → 确认后锁定。
 
 ### 1d. 提示词分层与模板参考（跨平台复用）
-- **图片 prompt 八层结构**：Subject → Action → Environment → Composition → Camera → Lighting → Color Palette → Style Reference。
-- **视频批次提示词**（Seedance 式，批次≤15秒）：【资产声明】`@是[角色/场景/声音]`（同一角色只声明一次）→【氛围与画质】STYLE_TOKEN 三层完整展开 + "在[场景名]，[光影基调]"→【画面内容】逐镜独立成行：`镜头N：[景别]，[非默认角度]，[运镜词]，[角色][朝向][动作]，[微表情]。[对白][音效][约Xs]` → 结束行"全程无字幕，无配乐，仅保留同期声"。
-- **时长计算**：基准秒=ceil(台词字数÷4)（无台词0），+动作秒（简单2/中等3-4/复杂5-8/氛围空镜3-4），最低2秒、情绪特写≥4秒。
-- **对白/音效格式**：`角色开口说道:"…"` / `心中涌起:"…"`（内心）/ `画外音响起:"…"`（旁白）；音效 `[音效：具体描述]` 放对白之后、时长之前，禁止在画面正文描述声音。
-- **运镜词库（禁止造词，除 FPV/POV 外禁用英文）**：固定/手持；平移（向前推进/向后拉远/左右横移/垂直升降/跟随主体）；旋转（左右水平旋转/快速甩镜/仰摇俯摇/滚转）；变焦（缓缓推近/拉远）；环绕（缓慢左右环绕）；航拍（垂直上升俯视/低空贴地/俯冲锁定/FPV）；特殊（POV/升格慢动作/降格快动作）。
+> ⚠️ **提示词铁律（用户明确要求，2026-08-25 起）**：**每个模型的提示词必须按其官方规范书写**——出图（Z-Image）与视频（MiniMax H3）各有独立官方格式，见下方 1d-2 分模型指南，禁止拿 A 模型习惯（SD 逗号标签 / Seedance 批次式）直接套到 B 模型。
+- **图片 prompt 八层结构**：Subject → Action → Environment → Composition → Camera → Lighting → Color Palette → Style Reference（仅作内容清单，最终按 Z-Image 官方自然语言完整句组织，见 1d-2）。
+- **视频批次提示词**（Seedance 式，批次≤15秒）：【资产声明】`@是[角色/场景/声音]`（同一角色只声明一次）→【氛围与画质】STYLE_TOKEN 三层完整展开 + "在[场景名]，[光影基调]"→【画面内容】逐镜独立成行：`镜头N：[景别]，[非默认角度]，[运镜词]，[角色][朝向][动作]，[微表情]。[对白][音效][约Xs]` → 结束行"全程无字幕，无配乐，仅保留同期声"。（⚠️ 仅 Seedance/国内视频平台批次用；**MiniMax H3 一律走 Ref2VA 六段式官方格式**，见 1d-2）
+- **时长计算**：基准秒=ceil(台词字数÷4)（无台词0），+动作秒（简单2/中等3-4/复杂5-8/氛围空镜3-4），最低2秒、情绪特写≥4秒。（H3 台词字数硬规则另有 4.5 字/秒，见 H3 指南）
+- **对白/音效格式**：`角色开口说道:"…"` / `心中涌起:"…"`（内心）/ `画外音响起:"…"`（旁白）；音效 `[音效：具体描述]` 放对白之后、时长之前，禁止在画面正文描述声音。（H3 对白语法完全不同：`<d>[语言] 原文</d>` + 画外音句式，见 1d-2）
+- **运镜词库（禁止造词，除 FPV/POV 外禁用英文）**：固定/手持；平移（向前推进/向后拉远/左右横移/垂直升降/跟随主体）；旋转（左右水平旋转/快速甩镜/仰摇俯摇/滚转）；变焦（缓缓推近/拉远）；环绕（缓慢左右环绕）；航拍（垂直上升俯视/低空贴地/俯冲锁定/FPV）；特殊（POV/升格慢动作/降格快动作）。（⚠️ 此为中文项目层运镜词表；**H3 官方运镜必须用英文官方词表** Push In/Pan/Truck/Tilt/Arc/Tracking…见 1d-2）
 - **导演法则**：视线法则（视线朝向目标 → 紧跟展示目标的镜头）；威胁切镜法则（威胁源与受威胁者镜头交替）；复杂动作拆解（蓄力/接近 → 接触/爆发 → 物理反馈/结果）；台词必切说话人面部；每批≥2镜、有台词批≥3镜。
 - **H3 口播 B-roll 模板（T01-T21）**：T01 结论金句 / T02 概念隐喻 / T03 数字冲击 / T04 证据摘录 / T05 流程关系 / T06 用户反馈 / T07 章节概览 / T08 口播叠加转全屏 / T09 3D 空间层次 / T10 关键词条 / T11 多条件交集 / T12 组织系统 / T13 对话交锋 / T14 双边对比 / T15 证据链路 / T16 人物档案 / T17 3D 组装 / T18 地理网络 / T19 技术演进 / T20 能力树 / T21 机制原理。文字预算分级：v1 ≤12字符（准确率优先）/ v2 ≤28字符（表现力优先）/ v3 ≤18字符（平衡推荐）；每镜一个核心语义、同屏≤2组辅助信息、文字正对镜头稳定≥1.5秒。
+
+### 1d-2. 分模型官方提示词规范（必读 · 每个模型的提示词按此书写）
+
+| 模型 | 官方格式 | 完整指南 | 一句话核心 |
+|---|---|---|---|
+| **Z-Image / Z-Image Turbo**（出图） | 自然语言完整句分层：主体→环境→风格→构图→光线材质→限制 | `references/z-image-prompt-guide.md` | **无负面提示词**（无 CFG，约束全写正向）；Qwen3 编码器偏好长自然语言完整句；图内文字加引号注明语言 |
+| **MiniMax H3**（视频） | Base 三字段（T2VA/I2VA/FL2VA/L2VA）或 **Ref2VA 六段式**（多参考） | `references/h3-prompt/h3-prompt-guide.md` | 六段式：subject_definitions/summary/**retention_analysis**/detailed_description/overall_soundscape/non_diegetic_music；对白 `<d>[语言] 原文</d>`；运镜英文官方词表 |
+
+**H3 Ref2VA 六段式速记（本项目主流程，逐段必须六段齐全）**：
+```
+subject_definitions:    # <Picture N> 锚点 / <Subject N> 可复用角色 / <Audio N> 音色
+summary:                # [reference generation + audio reference] 一句话（带对白必须 + audio reference）
+retention_analysis:     # 逐项 fully_preserved / partially_preserved / weak_reference
+detailed_description:   # [Shot 1] 无时间戳；后续递增；结尾半秒动作静止锚点；对白 <d>[Chinese] …</d>
+overall_soundscape:     # 环境音/物理声
+non_diegetic_music:     # 配乐（中间段不终止，末段收束）
+```
+- 对白：旁白类必须 `An [身份] voice speaks clearly in an off-screen voiceover: '<d>[Chinese] 台词</d>' while his/her lips remain completely closed.`（防火星语）
+- 台词字数 ÷ 4.5 ≤ 镜头时长；画布 768×1344 竖 / 1344×768 横；帧数 17k+5 网格
 
 ### 1e. 电影感镜头判断（cinema-dna-21x9x3 融合 · v1.2.2）
 用户要求"电影感""像电影截图""21:9 三联""不要广告/游戏/CG 感"，或要"随机发散选题材"时，在写分镜与出图前启用本层（完整规范见 `references/cinema-dna/`；示例三联图在工作区副本 `D:\dsh web 工作区\cinema-dna-21x9x3\examples\`）：
@@ -126,8 +147,10 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 
 **参考图管线（风景/真人参考图）**：`LoadImage(参考图) → WD14Tagger(wd-v1-4-moat-tagger-v2, threshold 0.35) → StringFunction(append 补充词) → 同上 Z-Image 初绘(风景 1344×896 / 真人 1024×1024) → LatentUpscaleBy(1.5) → KSampler(denoise 0.4) → 高清输出(2016×1344 / 1536×1536)`。补充词：风景「超写实风景摄影,自然光影,高清细节,专业风光摄影」；真人「超写实人像摄影,细腻皮肤质感,自然光,高清细节」。
 
-**提示词配方**：
-- positive = 场景描述（英文为佳）；负向：`CLIPTextEncode('')→ConditioningZeroOut`。
+**提示词配方**（⚠️ **必须按 Z-Image 官方规范写**，详见 `references/z-image-prompt-guide.md`）：
+- **无负面提示词**：Turbo 无 CFG，negative 不生效，所有约束写进正向提示词（本机工作流里的 `ConditioningZeroOut` 空负向仅作占位）。
+- **Qwen3 编码器偏好长自然语言完整句**：主体在前、细节在后，禁止 SD 式逗号标签堆叠。
+- positive = 场景描述（英文为佳）；图内文字加引号注明语言；正片素材一律 `no text, no letters, no signs` 禁字。
 - 分辨率：Z-Image 横版 `1216×832`、竖版 `832×1216`；视频画布 `1344×768`（H3 最大 16:9）。
 - **字幕不要烧进图**（SD 渲染文字差），由成片动画层叠加。
 - **每张生成图必须附提示词**（用户要求）：生成后运行 `node .comfy/attach.js`——写 PNG tEXt `noir-prompt` 块 + 同名 `.txt` 旁注；重拍脚本已自动附加。
@@ -266,6 +289,7 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 - `02-references_prompt-engineering.md.md` / `01-references_prompt-framework.md.md` — awesome-minimax-h3 / prompt-framework 提示词工程
 - `03-main_SKILL.md.md` — minimax-h3-prompt-skill（六段骨架+逐字指令行）
 - `05-main_README.md.md` / `07-main_README.md.md` — 本地/ComfyUI 提示词方案与完整示例（咖啡店场景等）
+- `official-spec-example-h3-jobs.json` — **官方规范整段示例**（2026-08-25 实测，7 段竖屏 Ref2VA 六段式全量：含 `+ audio reference` summary、off-screen voiceover 画外音、retention_analysis、结尾锚点）——新项目照此模板改
 - **实测结论**：H3 原生生成中文对白（voice-test：提示词写女声念「这一杯，属于你。纯粹，是唯一的奢侈。」，funasr 转写还原≈100%）
 
 ## H3 分段参考（长视频扩展，存于 `references/h3-segmented/`）
