@@ -2,13 +2,14 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清、V7 导播台）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation, V7 storyboard console), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.15.0
+version: 1.16.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
 
 > **语言**: 默认中文沟通；分镜、字幕、文案用中文，AI 出图/出视频提示词用英文。
 > **提示词铁律（2026-08-25 用户明确要求）**：每个模型的提示词必须按其**官方规范**书写——Z-Image 见 `references/z-image-prompt-guide.md`，MiniMax H3 见 `references/h3-prompt/h3-prompt-guide.md`，见 §1d-2。
+> **用户硬性要求（2026-08-25 沉淀，全项目强制执行，详见避坑 49–51）**：① 画面零文字零错别字（正片不得出现任何可读文字，字幕/定版字后期叠加）；② 开头结尾不得黑屏（首末帧必须是实际画面）；③ 跨段角色不得漂移穿帮（每段重复完整身份描述，出错单段重跑即可）。
 
 # AI 导演 Skill（DSH / Windows 版）
 
@@ -257,6 +258,9 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 46. **参考图必须"自我描述" + 资产标记**：换装/三视图提示词开头写 `the reference photo is the character's face — keep the face, hair and mole exactly the same; only change [服装/姿势/视角]`（别假设模型知道参考图内容）；单出的三视图/换装图配同名 `.txt` 旁注（参考来源+seed+要点），防止后续忘记用哪张参考导致身份不一致。
 47. **FLUX 提示词写法（BFL 官方）**：FLUX.1-dev 是自然语言模型——写完整句别堆关键词、**主体在前细节在后**、**不用负面词**（CFG 1.0 + FluxGuidance 3.5）、不要 SD1.5 那套 `masterpiece/best quality` 标签。参考图一致性用 Flux Kontext（原生参考图，提示词写 `the same character as in the reference image, keeping face/hair/mole exactly the same, now ...`）。12GB 低显存用 GGUF 量化（dev/kontext Q5_K_S 各 ~7.7GB 放 unet/），nunchaku 在 ComfyUI 0.24 跑不了别折腾。详见 `references/character-assets.md`「FLUX 提示词写法」。
 48. **本机出图用 Z-Image 高清管线，不要上 FLUX（2026-08-25 实测）**：12GB 显存上 FLUX Q5 GGUF 皮肤/布料细节软（量化损失）、fp8 跑不稳出图"花了"、Kontext 二采链参考尺寸不匹配崩图（只能原生 1536 无二采）。**出图生产继续用 Z-Image 高清二采管线**（`真人-参考图生成-高清版` + 高清正脸参考 + 1536 二采 + 可选 4x）；FLUX 等 24GB+ 显存再考虑。
+49. **画面零文字·零错别字（用户硬性要求，2026-08-25 沉淀）**：正片画面**不得出现任何可读文字**（模型渲染中英文极易出乱码错别字）。双保险——① 提示词强制禁字：Z-Image 出图 prompt 末尾必须写 `no text, no letters, no signs, no words`；H3 六段式 retention_analysis 必须含 `no readable text anywhere: fully_preserved`，detailed_description 末尾写 `no text, no letters, no signs, no subtitles`；② 审片必检：逐帧查路牌/横幅/门联/衣服 logo/墙面涂鸦/屏幕文字（这些最容易出乱码）；出图选版优先无字版，有字版本直接弃用或重跑。字幕/定版字一律后期 ffmpeg 叠加（用户可要求出无字版）。
+50. **开头/结尾不得黑屏（用户硬性要求，2026-08-25 沉淀）**：成片**第一帧与最后一帧必须是实际画面**，不得黑场（含 fade in/out 造成的纯黑过渡）。处理：① H3 提示词段1 开头、末段结尾避免纯黑构图（写清主体+光线）；② 成片合成后程序化检测首末帧亮度（`qa_video.py` 提帧，亮度均值过低即黑屏），黑屏则裁掉黑帧或缩短 fade（fade in/out ≤0.3s）；③ 需要黑场过渡的镜头设计应改为灰场/暗场或直接切。
+51. **多段角色漂移/穿帮（用户硬性要求，2026-08-25 沉淀）**：跨段人物身份漂移（如"干部背着的 3 岁小孩"在下段变成"老人"）是 V6 多段生成常见问题。预防：① 出图阶段把关键人物特征画清楚（年龄/服装/体态鲜明），作为 `<Subject N>` 写进 subject_definitions；② 每段提示词**重复完整身份描述**（年龄+服装+特征），不缩写、不省略（H3 不看参考图默认漂移）；③ **修复成本低**：只重跑出错段（`gen_h3_v6.js` 支持 `start`/`end` 参数单段重跑，热缓存约 4–5 分钟/段），改该段提示词更明确后重跑即可，无需整链重跑。
 
 ## 本机环境速查
 - ComfyUI 主实例：`C:\Users\Administrator\ComfyUI`（0.24.0，端口 8188，Z-Image/SDXL/FLUX）；**H3 实例：`D:\ComfyUI-H3`（0.33.1，端口 8190，MiniMax H3 视频）**
