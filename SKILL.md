@@ -2,7 +2,7 @@
 name: director
 description: AI 导演工作流 — 拍广告/短视频/宣传片/品牌片。从创意概念、分镜脚本、本地 ComfyUI/Z-Image 出图、MiniMax H3 视频生成（含 >15s 长视频分段生成、双采高清、V7 导播台）、审片重拍定稿，到 HTML 动画成片与 Web Audio 配乐，全程单文件夹交付。已融合 cinema-dna-21x9x3 电影感镜头判断（关系压力构图/视线流量/受控随机/色彩命题/21:9 三联叙事/反 CG-AI 模板检查/可选主题海报）。| AI Director workflow: ads / short films / brand videos — concept & storyboard, local ComfyUI Z-Image stills, MiniMax H3 video clips (incl. >15s segmented long-video generation, V7 storyboard console), review & lock, animated HTML edit with synthesized audio. Merged cinema-dna-21x9x3 cinematic shot judgment (pressure-based composition, visual traffic, color thesis, 21:9 triptych, anti-CG/AI checks).
 argument-hint: [时长-风格-产品] 例如 "30秒咖啡广告 极简高级感"
-version: 1.16.1
+version: 1.17.0
 user-invocable: true
 allowed-tools: Read, Write, Edit, pwsh, read_image, job_output, job_kill, web_search
 ---
@@ -120,6 +120,18 @@ non_diegetic_music:     # 配乐（中间段不终止，末段收束）
 - **反 CG/反 AI 检查**（出图后逐帧过）：排除史诗云层、魔法裂光、大量烟雾粒子、过亮轮廓光、玻璃般皮肤、全画面锐利、青橙调色、重颗粒/重色散/重光晕；排除 CG 概念图、游戏宣传图、AI 壁纸、偶像剧/电视剧站位；可做"动画片感/手工木偶感/童话/科幻运动"等方向，但转译成材质/表情/布景/色彩/调度，不复制现成 IP。
 - **与现有流程衔接**：1c 锁画风质感（STYLE_TOKEN），本层锁"叙事性构图"——先完成本层判断，再写 1d 的八层 prompt（构图/流量/色彩命题作为其中 Composition / Color Palette 的输入）；Z-Image 出 21:9 单帧时画布比例相应调整（如 1344×576 级别，拼接按上述规则）；视频三联需求逐镜走 2b（H3 画布 1344×768，三联拼接仅用于静帧/概念图交付）。
 - **可选片名+主题海报阶段**（仅用户明确要求"片名/命名/海报/封面/视觉体系/发布主图"时启用）：按分镜核心冲突生成片名候选 → 选主片名+英文名+logline → 从分镜提炼主视觉符号（不是把三图拼贴）→ 判断电影气质选排版/字体/颜色系统 → 主海报固定 **3:4 竖版**（prompt 必须写 `3:4 vertical poster composition`），16:9/1:1/9:16 仅作视觉体系扩展封面；参考海报只做抽象方法分析（大留白/标题压人物/书写笔触/文字穿插景深/单色底+高饱和点睛色/胶片颗粒/旧纸感），不复用其版式、片名、IP、人物关系、字体轮廓；直接画字只用一个短片名并预留后期校正空间，准确文字优先排版工具叠加。
+
+### 1e-2. 导演四轴视觉指纹 + Scene Master 锁（融合 zy-cinematic-realism v2.1.0 · 2026-09-04）
+> 方法来源：ZY / popopo-99《造梦师 v2.1.0》（CC BY-NC 4.0，个人非商用整合，保留署名）。资料目录 `references/zy-cinematic-realism/`（入口 README.md）。**只读所需分支，禁止整库载入。**
+> 启用时机：用户**点名导演** / 求导演方法、对比或推荐；或给出场景故事但想先选导演/风格方向。纯技术重拍、资产生成、H3 排障、以及用户拒绝候选时 → 本层不启用，原流程不变。
+
+- **候选推荐规则（用户明确要求）**：用户给出场景/故事/分镜想法但**未指定**风格或导演时 → 先按场景目标从 `references/zy-cinematic-realism/references/directors/recommendation-matrix.md`（按场景选导演矩阵）与 16 张风格卡（`style-cards.md`）筛 **2–4 个候选**，每个附一句话"为什么适合这镜"，**第一个标为推荐**，等用户选定再编译；用户已点名导演/风格、要求 prompt-only、或明确赶时间 → 跳过推荐直接干活。选定后同 §1c：锁定全程不可改。
+- **导演铁律（iconic 强制）**：命名任一在册导演即按 `强烈` 执行（轻微/明确/强烈/iconic 一视同仁）。四轴签名**缺一即失败输出**——`Lighting and contrast signature` / `Color and exposure signature` / `Lens and camera signature` / `Composition and spatial signature`，四行都必须是**当前场景的具体决策**，紧随场景事实之后、详细摄影机设计之前连续输出。禁止把导演名/片名/焦段数字/冷暖色互换当 shorthand；禁止复制任何具体电影画面。至少三轴发生结构性变化，并重选「时刻 / 视觉中心 / 机位 / 人物尺度 / 环境·人物·物件主导权」中至少三项；完稿后心里删掉导演名与片名，四轴仍须独立可辨（无法区分即重做）。
+- **图片线路（Z-Image）落地**：四轴先产出**场景级决策** → 再按 §1d-2 Z-Image 官方规范编译为**自然语言正向完整句**（不套 GPT/MJ 语法、不用负向）；文件里的 `Reject/避免` 类指令转成 Z-Image 正向排除写法（例："reject elegant noir key light" → `light comes only from practical sources: a green tube, a red exit sign, rainy doorway spill; most of the frame stays in unlit shadow`）。与 §1e 衔接顺序：先 1e 定"这一镜在看什么"（关系压力构图/视线流量/色彩命题）→ 1e-2 定导演的光影/色调/机位/空间四轴 → 再进 §1d 八层结构编译。画面零文字禁字铁律、反 CG/AI 检查不豁免。
+- **视频线路（MiniMax H3）落地**：用户要"整支片有 X 导演的调性"或点名导演拍片时 → 先出该导演**本片化四轴「视觉语言锁定」**（并入 §1c STYLE_TOKEN，全片跨段锁定，不得片中换导演），再每镜照常按 §2b / §1d-2 的 Ref2VA 六段式编译——四轴作为 detailed_description 的**画面视觉层输入**；运镜/对白/时长/音效仍走 H3 官方词表与语法，导演层不得违反用户硬性要求（画面零文字、首末帧非黑、跨段身份不漂移、对白口径）。多镜/长片一致性 = zy 的 **Base Lock + Shot Delta**（Continuity Bible，`continuity-cards.md`）：全片一份 Base Lock（角色/服装/道具/场景/光线），每段只写一条有限 Shot Delta。只改单镜用 **Prompt Doctor**（`result-repair.md`）：`CHANGE ONLY 机位/光影/动作…；PRESERVE EXACTLY 其余全部`，单段重跑即可，与避坑 51 同逻辑，禁止整链重跑。
+- **Scene Master 锁（静帧/视频通用方法论）**：任何风格、导演、模型语法介入之前，先锁定场景事实——人物身份、场景、时间、天气、故事节拍、当前动作、视觉中心、机位、光源、核心道具、画幅、显式限制；`MODEL SYNTAX MAY CHANGE. SCENE LOGIC MAY NOT.`（模型语言可以改变，画面设计不能偷偷改变）。编译/转码后对照锁还原任何漂移。Schema 与 Transcode Lock 见 `references/zy-cinematic-realism/references/prompt-compiler.md`。
+- **文件路由**：单导演 → `director-routing.md` + `directors/<slug>.md`（如刁亦男 = `diao-yinan.md`）恰一个文件；对比/推荐 → `recommendation-matrix.md` + 2–3 位候选文件；风格卡 → `style-cards.md`；摄影卡 → `cinematography-cards.md`；Remix → `remix.md`；生成前检查 → `prompt-check.md`；出图后 → `anti-ai-cleanup.md` + `quality-checklist.md`。
+- **范围声明**：上游的**四模型原生编译器（GPT Image 2 / Midjourney V8.2 / Seedream 5.0 Pro / Nano Banana）与 model-routing / model-capability-matrix 未内置**（本机不用，避免死链与误用）。若用户明确要在这些模型生成原生 prompt，告知本机只落地 Z-Image/H3，并指向本地克隆 `D:\dsh web 工作区\zy-cinematic-realism\zy-cinematic-realism\` 或上游仓库。
 
 ### 2. 本地出图（ComfyUI + Z-Image）
 探测本机环境（本机已知：ComfyUI 在 `C:\Users\Administrator\ComfyUI` 与 `D:\ComfyUI-H3`，模型库 `D:\download\ComfyUI_models`，GPU RTX 4070 SUPER 12GB + 32GB RAM）：
@@ -308,3 +320,12 @@ Get-Content <comfy>\extra_model_paths.yaml   # base_path 即模型库
 - `cinema-dna-full-spec.md` — 完整电影语法规范（48KB）
 - `cinema-dna-v4-anti-ai.md` — 反 AI 电影帧补丁（10.9KB）
 - 来源：GitHub `dacnay816y62-hub/cinema-dna-21x9x3`（公开）；本地工作区副本 `D:\dsh web 工作区\cinema-dna-21x9x3\`（含 examples/ 精选三联示例图，约 87MB，未随本仓库分发）
+
+## ZY 造梦师导演库参考（融合 zy-cinematic-realism v2.1.0，存于 `references/zy-cinematic-realism/`）
+- `README.md` — 整合入口：来源/版本/授权（CC BY-NC 4.0）/文件索引/升级回滚
+- `references/director-routing.md` — **导演层使用规则（入口）**：iconic 强制模式、四轴签名完整性、混合/对比/推荐路由、输出块格式
+- `references/directors/` — **38 位导演四轴指纹库**（`index.md` 总索引 + `recommendation-matrix.md` 按场景推荐矩阵 + 每位一个 `<slug>.md`，含 Identity/四轴指纹/常见误读/最近邻对比/Default Iconic Anchor）
+- `references/style-cards.md`（16 风格卡）、`references/cinematography-cards.md`（8 摄影卡）、`references/creative-cards.md` / `creative-shuffle.md`（三卡组合与受控重组）
+- `references/prompt-compiler.md` — Scene Master Schema + Transcode Lock（方法论核心，§1e-2 的锁来源）
+- `references/continuity-cards.md`（Base Lock + Shot Delta）、`prompt-check.md`（生成前检查）、`result-repair.md`（Prompt Doctor）、`remix.md`（One Variable Remix）、`anti-ai-cleanup.md`、`quality-checklist.md`、`cinematic-principles.md`、`camera-and-light.md`、`negative-prompts.md`（⚠️ Z-Image 无负向，须转正向）、`examples.md`
+- 来源：GitHub `popopo-99/zy-cinematic-realism`（公开，v2.1.0，CC BY-NC 4.0）；本地克隆 `D:\dsh web 工作区\zy-cinematic-realism\`（含未内置的四模型编译器与顶层 SKILL.md）
